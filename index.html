@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranieri Carta e Affini – Ingrosso Monouso</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --dark: #1A1A14;
+    --olive: #4A5240;
+    --gold: #C8A84B;
+    --rust: #C25B3F;
+    --light: #FAF7F2;
+    --mid: #8A8070;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200,168,75,0.2);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--dark);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--olive); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--dark); color: var(--cream);
+    padding: 0.65rem 1.5rem; border-radius: 2px;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--dark); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 6rem 4rem 6rem 5rem;
+    position: relative; z-index: 2;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--gold); color: var(--dark);
+    padding: 0.35rem 0.9rem; border-radius: 2px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 2rem;
+    width: fit-content;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 4.5vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+  .hero-title em { font-style: italic; color: var(--rust); }
+  .hero-sub {
+    font-size: 1.05rem; line-height: 1.7; color: var(--mid);
+    max-width: 480px; margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+  .btn-primary {
+    background: var(--rust); color: #fff;
+    padding: 1rem 2rem; border-radius: 2px;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-primary:hover { background: var(--dark); transform: translateY(-2px); }
+  .btn-secondary {
+    background: transparent; color: var(--dark);
+    padding: 1rem 2rem; border-radius: 2px;
+    border: 1.5px solid var(--dark);
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-secondary:hover { background: var(--dark); color: var(--cream); }
+
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 4rem;
+    padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.1);
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 900; color: var(--dark);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.78rem; color: var(--mid); margin-top: 0.3rem; letter-spacing: 0.06em; }
+
+  .hero-right {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--olive);
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.03) 40px,
+      rgba(255,255,255,0.03) 41px
+    );
+  }
+  .hero-visual {
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    padding: 3rem;
+    animation: fadeIn 1s ease 0.5s both;
+  }
+  .product-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px; padding: 2rem 1.5rem;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s, background 0.3s;
+    cursor: pointer;
+  }
+  .product-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.14); }
+  .product-card .icon { font-size: 2.5rem; margin-bottom: 0.8rem; display: block; }
+  .product-card h3 { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; color: #fff; text-transform: uppercase; }
+  .product-card p { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-top: 0.3rem; }
+  .product-card.featured { background: var(--gold); border-color: var(--gold); grid-column: span 2; }
+  .product-card.featured h3 { color: var(--dark); }
+  .product-card.featured p { color: rgba(26,26,20,0.65); }
+
+  /* STRIP */
+  .strip {
+    background: var(--dark); color: var(--cream);
+    padding: 1.2rem 4rem;
+    display: flex; align-items: center; gap: 4rem;
+    overflow: hidden;
+  }
+  .strip-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .strip-item span { color: var(--gold); font-size: 1rem; }
+
+  /* CATEGORIES */
+  .categories { padding: 8rem 5rem; }
+  .section-tag {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 700; line-height: 1.15; letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .section-sub { color: var(--mid); font-size: 1rem; line-height: 1.7; max-width: 500px; margin-bottom: 4rem; }
+
+  .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .cat-item {
+    border: 1.5px solid rgba(0,0,0,0.1);
+    border-radius: 4px; padding: 2.5rem 2rem;
+    cursor: pointer; transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .cat-item::before {
+    content: '';
+    position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+    background: var(--gold); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .cat-item:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+  .cat-item:hover::before { transform: scaleX(1); }
+  .cat-icon { font-size: 2.2rem; margin-bottom: 1.2rem; display: block; }
+  .cat-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .cat-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.6; }
+  .cat-count { margin-top: 1.5rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; color: var(--gold); }
+
+  /* B2B SECTION */
+  .b2b-section {
+    background: var(--dark); color: var(--cream);
+    padding: 8rem 5rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+    align-items: center;
+  }
+  .b2b-section .section-tag { color: var(--gold); }
+  .b2b-section .section-title { color: var(--cream); }
+  .b2b-section .section-sub { color: rgba(245,240,232,0.6); }
+  .b2b-benefits { display: flex; flex-direction: column; gap: 1.5rem; }
+  .benefit {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px; transition: border-color 0.2s;
+  }
+  .benefit:hover { border-color: var(--gold); }
+  .benefit-icon { font-size: 1.8rem; flex-shrink: 0; }
+  .benefit h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .benefit p { font-size: 0.82rem; color: rgba(245,240,232,0.55); line-height: 1.6; }
+
+  /* BRANDED */
+  .branded { padding: 8rem 5rem; background: var(--cream); }
+  .branded-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .branded-visual {
+    background: var(--olive); border-radius: 4px;
+    padding: 4rem; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 1.5rem;
+    min-height: 400px; position: relative; overflow: hidden;
+  }
+  .branded-visual::before {
+    content: 'BRAND';
+    position: absolute; font-family: 'Playfair Display', serif;
+    font-size: 8rem; font-weight: 900; color: rgba(255,255,255,0.04);
+    letter-spacing: -0.05em;
+  }
+  .sample-box {
+    background: white; border-radius: 2px;
+    padding: 1.5rem 2.5rem; text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    transform: rotate(-3deg);
+    position: relative; z-index: 1;
+  }
+  .sample-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--olive); }
+  .sample-sub { font-size: 0.65rem; letter-spacing: 0.12em; color: var(--mid); text-transform: uppercase; margin-top: 0.3rem; }
+  .sample-box2 {
+    background: var(--gold); border-radius: 2px;
+    padding: 0.8rem 1.5rem; text-align: center;
+    transform: rotate(2deg);
+    position: relative; z-index: 1;
+  }
+  .sample-box2 .sample-logo { color: var(--dark); font-size: 0.9rem; }
+
+  /* HOW IT WORKS */
+  .how { padding: 8rem 5rem; text-align: center; }
+  .how .section-title { margin-bottom: 1rem; }
+  .how .section-sub { margin: 0 auto 5rem; text-align: center; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; position: relative; }
+  .steps::before {
+    content: '';
+    position: absolute; top: 2rem; left: 12.5%; right: 12.5%;
+    height: 1px; background: var(--gold); z-index: 0;
+  }
+  .step { position: relative; z-index: 1; }
+  .step-num {
+    width: 4rem; height: 4rem; border-radius: 50%;
+    background: var(--gold); color: var(--dark);
+    font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  .step h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.6rem; }
+  .step p { font-size: 0.82rem; color: var(--mid); line-height: 1.6; }
+
+  /* ORDER FORM */
+  .order-section { padding: 8rem 5rem; background: var(--cream); }
+  .order-inner { max-width: 800px; margin: 0 auto; text-align: center; }
+  .order-inner .section-title { margin-bottom: 0.5rem; }
+  .order-inner .section-sub { margin: 0 auto 3rem; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group.full { grid-column: span 2; }
+  label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--olive); }
+  input, select, textarea {
+    padding: 0.9rem 1rem; border: 1.5px solid rgba(0,0,0,0.12);
+    border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    background: white; color: var(--dark); outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+  textarea { resize: vertical; min-height: 100px; }
+  .form-submit {
+    grid-column: span 2; margin-top: 1rem;
+    background: var(--rust); color: white; border: none;
+    padding: 1.1rem 2.5rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer; border-radius: 2px;
+    transition: background 0.2s, transform 0.2s; width: 100%;
+  }
+  .form-submit:hover { background: var(--dark); transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); color: rgba(245,240,232,0.6);
+    padding: 5rem 5rem 2rem;
+  }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
+  .footer-brand .nav-logo { font-size: 1.5rem; display: block; margin-bottom: 1rem; }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.7; max-width: 280px; }
+  .footer-col h4 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-col a { font-size: 0.85rem; color: rgba(245,240,232,0.55); text-decoration: none; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08); padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem;
+  }
+  .footer-bottom a { color: var(--gold); text-decoration: none; }
+
+  /* WHATSAPP FLOAT */
+  .wa-float {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+    width: 3.5rem; height: 3.5rem; border-radius: 50%;
+    background: #25D366; color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: pulse 2s infinite;
+  }
+  .wa-float:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(37,211,102,0.5); }
+
+  /* CATALOG */
+  .catalog { padding: 8rem 5rem; background: var(--light); }
+  .catalog-filters {
+    display: flex; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 3rem;
+  }
+  .filter-btn {
+    padding: 0.5rem 1.2rem; border-radius: 2px; cursor: pointer;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; border: 1.5px solid rgba(0,0,0,0.12);
+    background: white; color: var(--olive); transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+  .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .prod-card {
+    background: white; border-radius: 4px; overflow: hidden;
+    border: 1.5px solid rgba(0,0,0,0.06);
+    transition: all 0.3s; cursor: pointer;
+  }
+  .prod-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); border-color: var(--gold); }
+  .prod-img {
+    height: 160px; background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem; position: relative;
+  }
+  .prod-badge {
+    position: absolute; top: 0.8rem; right: 0.8rem;
+    background: var(--rust); color: white;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+    padding: 0.2rem 0.5rem; border-radius: 2px; text-transform: uppercase;
+  }
+  .prod-badge.green { background: var(--olive); }
+  .prod-info { padding: 1.2rem; }
+  .prod-cat { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+  .prod-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .prod-desc { font-size: 0.78rem; color: var(--mid); line-height: 1.5; margin-bottom: 1rem; }
+  .prod-footer { display: flex; align-items: center; justify-content: space-between; }
+  .prod-price { font-size: 0.8rem; color: var(--mid); }
+  .prod-price strong { font-size: 1.1rem; color: var(--dark); font-weight: 700; }
+  .prod-btn {
+    background: var(--dark); color: white;
+    padding: 0.5rem 1rem; border-radius: 2px; border: none;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+  }
+  .prod-btn:hover { background: var(--rust); }
+
+  /* REVIEWS */
+  .reviews { padding: 8rem 5rem; background: var(--cream); }
+  .reviews-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
+  .reviews-avg { text-align: right; }
+  .avg-num { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900; line-height: 1; color: var(--dark); }
+  .avg-stars { color: var(--gold); font-size: 1.3rem; letter-spacing: 0.1em; }
+  .avg-count { font-size: 0.78rem; color: var(--mid); margin-top: 0.3rem; }
+  .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .review-card {
+    background: white; border-radius: 4px; padding: 2rem;
+    border: 1.5px solid rgba(0,0,0,0.06);
+    transition: all 0.3s;
+  }
+  .review-card:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.08); transform: translateY(-3px); }
+  .review-stars { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; }
+  .review-text { font-size: 0.88rem; line-height: 1.7; color: var(--dark); font-style: italic; margin-bottom: 1.5rem; }
+  .review-author { display: flex; align-items: center; gap: 0.8rem; }
+  .review-avatar {
+    width: 2.5rem; height: 2.5rem; border-radius: 50%;
+    background: var(--olive); display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; color: white; font-weight: 700; flex-shrink: 0;
+  }
+  .review-name { font-size: 0.85rem; font-weight: 600; }
+  .review-role { font-size: 0.72rem; color: var(--mid); }
+
+  /* SAMPLE REQUEST */
+  .sample-section {
+    padding: 6rem 5rem;
+    background: linear-gradient(135deg, var(--olive) 0%, #2d3528 100%);
+    color: white;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+  }
+  .sample-section .section-tag { color: var(--gold); }
+  .sample-section .section-title { color: white; }
+  .sample-section .section-sub { color: rgba(255,255,255,0.6); max-width: 100%; }
+  .sample-perks { display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0; }
+  .sample-perk {
+    display: flex; align-items: center; gap: 1rem;
+    font-size: 0.88rem; color: rgba(255,255,255,0.85);
+  }
+  .sample-perk-icon {
+    width: 2.5rem; height: 2.5rem; border-radius: 50%;
+    background: rgba(200,168,75,0.2); border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .sample-form { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 2.5rem; }
+  .sample-form h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1.5rem; }
+  .sample-form .form-group { margin-bottom: 1rem; }
+  .sample-form label { color: rgba(255,255,255,0.7); }
+  .sample-form input, .sample-form select {
+    background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: white;
+  }
+  .sample-form input::placeholder { color: rgba(255,255,255,0.35); }
+  .sample-form input:focus, .sample-form select:focus { border-color: var(--gold); }
+  .sample-form select option { background: var(--dark); }
+  .sample-submit {
+    width: 100%; padding: 1rem; background: var(--gold); color: var(--dark);
+    border: none; border-radius: 2px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; cursor: pointer; margin-top: 0.5rem;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .sample-submit:hover { background: white; transform: translateY(-2px); }
+
+  /* B2B AREA */
+  .b2b-area { padding: 8rem 5rem; background: var(--light); }
+  .b2b-area-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .b2b-login-card {
+    background: white; border-radius: 4px; padding: 3rem;
+    border: 1.5px solid rgba(0,0,0,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  }
+  .b2b-login-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .b2b-login-card p { font-size: 0.85rem; color: var(--mid); margin-bottom: 2rem; line-height: 1.6; }
+  .b2b-features { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .b2b-feat {
+    background: var(--cream); border-radius: 4px; padding: 1.2rem;
+    text-align: center;
+  }
+  .b2b-feat .icon { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
+  .b2b-feat span { font-size: 0.75rem; font-weight: 600; color: var(--olive); }
+
+  /* NEWSLETTER */
+  .newsletter {
+    padding: 5rem; background: var(--gold);
+    display: flex; align-items: center; justify-content: space-between; gap: 4rem;
+  }
+  .newsletter-text h2 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--dark); }
+  .newsletter-text p { color: rgba(26,26,20,0.65); margin-top: 0.5rem; font-size: 0.9rem; }
+  .newsletter-form { display: flex; gap: 0; flex-shrink: 0; }
+  .newsletter-form input {
+    padding: 1rem 1.5rem; border: none; border-radius: 2px 0 0 2px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    width: 300px; outline: none; background: white; color: var(--dark);
+  }
+  .newsletter-form button {
+    padding: 1rem 1.5rem; background: var(--dark); color: white;
+    border: none; border-radius: 0 2px 2px 0; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+    font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    white-space: nowrap; transition: background 0.2s;
+  }
+  .newsletter-form button:hover { background: var(--rust); }
+
+  /* BLOG */
+  .blog { padding: 8rem 5rem; }
+  .blog-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
+  .blog-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1.5rem; }
+  .blog-card {
+    border-radius: 4px; overflow: hidden;
+    border: 1.5px solid rgba(0,0,0,0.06); background: white;
+    transition: all 0.3s; cursor: pointer;
+  }
+  .blog-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
+  .blog-img {
+    background: var(--olive); height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; position: relative; overflow: hidden;
+  }
+  .blog-card.featured .blog-img { height: 280px; background: var(--rust); }
+  .blog-img-overlay {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 21px);
+  }
+  .blog-body { padding: 1.5rem; }
+  .blog-tag {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .blog-title { font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1.3; margin-bottom: 0.6rem; }
+  .blog-card.featured .blog-title { font-size: 1.3rem; }
+  .blog-card:not(.featured) .blog-title { font-size: 1rem; }
+  .blog-excerpt { font-size: 0.8rem; color: var(--mid); line-height: 1.6; margin-bottom: 1rem; }
+  .blog-meta { font-size: 0.72rem; color: var(--mid); display: flex; gap: 1rem; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+    50% { box-shadow: 0 4px 30px rgba(37,211,102,0.7); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { min-height: 300px; }
+    .hero-left { padding: 4rem 1.5rem; }
+    .categories, .b2b-section, .branded, .how, .order-section, footer { padding: 4rem 1.5rem; }
+    .cat-grid { grid-template-columns: 1fr 1fr; }
+    .b2b-section, .branded-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .steps::before { display: none; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full, .form-submit { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Ranieri <span>Carta</span> e Affini</a>
+  <ul class="nav-links">
+    <li><a href="#catalogo">Catalogo</a></li>
+    <li><a href="#ingrosso">Ingrosso B2B</a></li>
+    <li><a href="#personalizzati">Brandizzati</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contatti">Contatti</a></li>
+  </ul>
+  <a href="#ordine" class="nav-cta">Ordina Ora</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">⭐ Ingrosso Professionale — Consegna in tutta Italia</div>
+    <h1 class="hero-title">
+      Monouso di qualità,<br>
+      <em>ovunque tu sia</em>
+    </h1>
+    <p class="hero-sub">
+      Da Boscoreale al resto d'Italia. Forniamo bar, ristoranti, pizzerie e alberghi con carta, plastica e imballaggi alimentari. Prezzi all'ingrosso, ordini online, spedizione rapida.
+    </p>
+    <div class="hero-actions">
+      <a href="#prodotti" class="btn-primary">🛒 Scopri i Prodotti</a>
+      <a href="https://wa.me/393336350643" class="btn-secondary">💬 Scrivici su WhatsApp</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Clienti attivi</div>
+      </div>
+      <div>
+        <div class="stat-num">1000+</div>
+        <div class="stat-label">Prodotti a catalogo</div>
+      </div>
+      <div>
+        <div class="stat-num">24h</div>
+        <div class="stat-label">Consegna media</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="product-card featured">
+        <span class="icon">📦</span>
+        <h3>Nuova Linea Eco-Friendly</h3>
+        <p>Prodotti biodegradabili e compostabili per la ristorazione</p>
+      </div>
+      <div class="product-card">
+        <span class="icon">🍕</span>
+        <h3>Cartoni Pizza</h3>
+        <p>Tutte le misure</p>
+      </div>
+      <div class="product-card">
+        <span class="icon">🥤</span>
+        <h3>Bicchieri</h3>
+        <p>Carta e plastica</p>
+      </div>
+      <div class="product-card">
+        <span class="icon">🛍️</span>
+        <h3>Buste & Shopper</h3>
+        <p>Personalizzabili</p>
+      </div>
+      <div class="product-card">
+        <span class="icon">🧴</span>
+        <h3>Igiene</h3>
+        <p>Guanti, mascherine</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-item"><span>🚚</span> Spedizione in tutta Italia</div>
+  <div class="strip-item"><span>📋</span> Ordine minimo per ingrosso</div>
+  <div class="strip-item"><span>🏷️</span> Prezzi competitivi garantiti</div>
+  <div class="strip-item"><span>🎨</span> Articoli personalizzabili</div>
+  <div class="strip-item"><span>📞</span> Supporto diretto via WhatsApp</div>
+</div>
+
+<!-- CATALOG -->
+<section class="catalog" id="catalogo">
+  <div class="section-tag">Catalogo Prodotti</div>
+  <h2 class="section-title">Sfoglia i nostri prodotti</h2>
+  <p class="section-sub">Prezzi indicativi per ordini all'ingrosso. Contattaci per listini personalizzati in base ai volumi.</p>
+  <div class="catalog-filters">
+    <button class="filter-btn active" onclick="filterProducts('tutti', this)">Tutti</button>
+    <button class="filter-btn" onclick="filterProducts('carta', this)">Carta & Tovaglioli</button>
+    <button class="filter-btn" onclick="filterProducts('contenitori', this)">Contenitori</button>
+    <button class="filter-btn" onclick="filterProducts('buste', this)">Buste & Imballaggi</button>
+    <button class="filter-btn" onclick="filterProducts('bicchieri', this)">Bicchieri & Piatti</button>
+    <button class="filter-btn" onclick="filterProducts('igiene', this)">Igiene</button>
+    <button class="filter-btn" onclick="filterProducts('brandizzati', this)">Brandizzati</button>
+  </div>
+  <div class="products-grid" id="productsGrid">
+    <div class="prod-card" data-cat="carta">
+      <div class="prod-img">🍽️<div class="prod-badge green">Eco</div></div>
+      <div class="prod-info">
+        <div class="prod-cat">Carta</div>
+        <div class="prod-name">Tovaglioli 2 Veli</div>
+        <div class="prod-desc">Formato 33x33, conf. da 100 pz. Morbidi e resistenti, ideali per ristoranti e bar.</div>
+        <div class="prod-footer">
+          <div class="prod-price">da <strong>€2,90</strong>/cf</div>
+          <button class="prod-btn" onclick="addToQuote('Tovaglioli 2 Veli')">+ Preventivo</button>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card" data-cat="contenitori">
+      <div class="prod-img">🍕<div class="prod-badge">Top</div></div>
+      <div class="prod-info">
+        <div class="prod-cat">Contenitori</div>
+        <div class="prod-name">Cartone Pizza 33cm</div>
+        <div class="prod-desc">Cartone ondulato bianco, confezione da 100 pz. Adatto per forni fino a 300°C.</div>
+        <div class="prod-footer">
+          <div class="prod-price">da <strong>€8,50</strong>/cf</div>
+          <button class="prod-btn" onclick="addToQuote('Cartone Pizza 33cm')">+ Preventivo</button>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card" data-cat="buste">
+      <div class="prod-img">🛍️</div>
+      <div class="prod-info">
+        <div class="prod-cat">Buste</div>
+        <div class="prod-name">Busta Shopper HDPE</div>
+        <div class="prod-desc">Shopper in polietilene ad alta densità, misura 30x60, conf. 500 pz.</div>
+        <div class="prod-footer">
+          <div class="prod-price">da <strong>€5,20</strong>/cf</div>
+          <button class="prod-btn" onclick="addToQuote('Busta Shopper HDPE')">+ Preventivo</button>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card" data-cat="bicchieri">
+      <div class="prod-img">☕<div class="prod-badge">Hot</div></div>
+      <div class="prod-info">
+        <div class="prod-cat">Bicchieri</div>
+        <div class="prod-name">Bicchiere Carta Caffè</div>
+        <div class="prod-desc">75ml per espresso, doppia parete termica. Conf. 50 pz. Ideale per asporto.</div>
+        <div class="prod-footer">
+          <div class="prod-price">da <strong>€3,80</strong>/cf</div>
+          <button class="prod-btn" onclick="addToQuote('Bicchiere Carta Caffè')">+ Preventivo</button>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card" data-cat="contenitori">
+      <div class="prod-img">🥡<div class="prod-badge green">Eco</div></div>
+      <div class="prod-info">
+        <div class="prod-cat">Contenitori</div>
+        <div class="prod-name">Box Asporto Bio</div>
+        <div class="prod-desc">Contenitore in cartoncino compostabile 1000ml, conf. 50 pz. Certificato OK Compost.</div>
+        <div class="prod-footer">
+          <div class="prod-price">da <strong>€9,90</strong>/cf</div>
+          <button class="prod-btn" onclick="addToQuote('Box Asporto Bio')">+ Preventivo</button>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card" data-cat="igiene">
+      <div class="prod-img">🧤</div>
+      <div class="prod-info">
+        <div class="prod-cat">Igiene</div>
+        <div class="prod-name">Guanti Nitrile Neri</div>
+        <div class="prod-desc">Taglia M, senza polvere, conf. 100 pz. Resistenti a grassi e oli alimentari.</div>
+        <div class="prod-footer">
+          <div class="prod-price">da <strong>€6,50</strong>/cf</div>
+          <button class="prod-btn" onclick="addToQuote('Guanti Nitrile Neri')">+ Preventivo</button>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card" data-cat="carta">
+      <div class="prod-img">📜</div>
+      <div class="prod-info">
+        <div class="prod-cat">Carta</div>
+        <div class="prod-name">Carta Forno Silicone</div>
+        <div class="prod-desc">Rotolo 50mt x 38cm, antiaderente, fino a 220°C. Per pasticcerie e pizzerie.</div>
+        <div class="prod-footer">
+          <div class="prod-price">da <strong>€4,20</strong>/rt</div>
+          <button class="prod-btn" onclick="addToQuote('Carta Forno Silicone')">+ Preventivo</button>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card" data-cat="brandizzati">
+      <div class="prod-img">🎨<div class="prod-badge">Custom</div></div>
+      <div class="prod-info">
+        <div class="prod-cat">Brandizzati</div>
+        <div class="prod-name">Shopper con Logo</div>
+        <div class="prod-desc">Shopper personalizzata con il tuo logo. Min. 500 pz. Grafica inclusa nel prezzo.</div>
+        <div class="prod-footer">
+          <div class="prod-price">da <strong>€0,35</strong>/pz</div>
+          <button class="prod-btn" onclick="addToQuote('Shopper con Logo')">+ Preventivo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="quoteBar" style="display:none; margin-top:2rem; background:var(--dark); color:white; padding:1.2rem 2rem; border-radius:4px; display:none; align-items:center; justify-content:space-between;">
+    <span id="quoteCount">0 prodotti selezionati per il preventivo</span>
+    <a href="#ordine" class="btn-primary" style="background:var(--gold);color:var(--dark);">Richiedi Preventivo →</a>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="recensioni">
+  <div class="reviews-header">
+    <div>
+      <div class="section-tag">Cosa dicono i clienti</div>
+      <h2 class="section-title">La fiducia dei nostri<br>partner</h2>
+    </div>
+    <div class="reviews-avg">
+      <div class="avg-num">4.9</div>
+      <div class="avg-stars">★★★★★</div>
+      <div class="avg-count">Basato su 127 recensioni</div>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Forniamo il nostro ristorante con Ranieri da tre anni. Qualità costante, prezzi onesti e sempre disponibili su WhatsApp. Non cambieremmo mai fornitore."</p>
+      <div class="review-author">
+        <div class="review-avatar">MR</div>
+        <div>
+          <div class="review-name">Marco Russo</div>
+          <div class="review-role">Ristorante Da Marco – Napoli</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Abbiamo ordinato le shopper personalizzate con il logo del bar. Qualità eccellente, tempi rapidi e grafica curata. I clienti le adorano, fanno pubblicità da soli."</p>
+      <div class="review-author">
+        <div class="review-avatar">LV</div>
+        <div>
+          <div class="review-name">Laura Vitale</div>
+          <div class="review-role">Bar Vittoria – Salerno</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Spediscono anche a Roma senza problemi. Ho iniziato con un ordine di prova e ora ordino ogni mese. Prodotti sempre conformi, imballaggi perfetti, nessuna sorpresa."</p>
+      <div class="review-author">
+        <div class="review-avatar">GF</div>
+        <div>
+          <div class="review-name">Giuseppe Ferretti</div>
+          <div class="review-role">Pizzeria Ferretti – Roma</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAMPIONI GRATUITI -->
+<section class="sample-section" id="campioni">
+  <div>
+    <div class="section-tag">Prova Prima di Acquistare</div>
+    <h2 class="section-title">Richiedi i tuoi campioni<br>gratuiti</h2>
+    <p class="section-sub">Non sei sicuro della qualità? Mandaci il tuo indirizzo e ti spediamo un kit campioni dei prodotti che ti interessano. Senza impegno, senza costi.</p>
+    <div class="sample-perks">
+      <div class="sample-perk"><div class="sample-perk-icon">📦</div> Kit campioni selezionati sulle tue esigenze</div>
+      <div class="sample-perk"><div class="sample-perk-icon">🚚</div> Spedizione gratuita in tutta Italia</div>
+      <div class="sample-perk"><div class="sample-perk-icon">⏱️</div> Consegna entro 3-5 giorni lavorativi</div>
+      <div class="sample-perk"><div class="sample-perk-icon">💬</div> Nessun commerciale che ti chiama, solo WhatsApp se vuoi</div>
+    </div>
+  </div>
+  <div class="sample-form">
+    <h3>🎁 Richiedi il Kit Campioni</h3>
+    <div class="form-group" style="margin-bottom:1rem;">
+      <label>Nome e Attività *</label>
+      <input type="text" placeholder="Mario – Pizzeria Da Mario">
+    </div>
+    <div class="form-group" style="margin-bottom:1rem;">
+      <label>Email *</label>
+      <input type="email" placeholder="mario@pizzeria.it">
+    </div>
+    <div class="form-group" style="margin-bottom:1rem;">
+      <label>Indirizzo di spedizione *</label>
+      <input type="text" placeholder="Via Roma 1, 00100 Roma (RM)">
+    </div>
+    <div class="form-group" style="margin-bottom:1rem;">
+      <label>Prodotti di interesse</label>
+      <select>
+        <option>Carta & Tovaglioli</option>
+        <option>Contenitori Asporto</option>
+        <option>Bicchieri & Piatti</option>
+        <option>Buste & Shopper</option>
+        <option>Articoli Brandizzati</option>
+        <option>Mix di tutto</option>
+      </select>
+    </div>
+    <button class="sample-submit" onclick="this.textContent='✅ Richiesta inviata! Ti contatteremo presto.'; this.style.background='#4A5240';">📬 Invia Richiesta Campioni</button>
+  </div>
+</section>
+
+<!-- AREA RISERVATA B2B -->
+<section class="b2b-area" id="area-b2b">
+  <div class="b2b-area-inner">
+    <div>
+      <div class="section-tag">Area Clienti</div>
+      <h2 class="section-title">Accedi all'area<br>riservata B2B</h2>
+      <p class="section-sub">I nostri clienti abituali hanno accesso a un portale dedicato con listino personalizzato, storico ordini, fatture e la possibilità di riordinare con un click.</p>
+      <div style="display:flex; flex-direction:column; gap:0.8rem; margin-top:2rem;">
+        <div style="display:flex;gap:0.8rem;align-items:center;font-size:0.9rem;"><span style="color:var(--gold)">✓</span> Listino prezzi riservato aggiornato in tempo reale</div>
+        <div style="display:flex;gap:0.8rem;align-items:center;font-size:0.9rem;"><span style="color:var(--gold)">✓</span> Storico completo degli ordini e fatture scaricabili</div>
+        <div style="display:flex;gap:0.8rem;align-items:center;font-size:0.9rem;"><span style="color:var(--gold)">✓</span> Riordino rapido con un solo click</div>
+        <div style="display:flex;gap:0.8rem;align-items:center;font-size:0.9rem;"><span style="color:var(--gold)">✓</span> Notifiche promozioni e nuovi prodotti in anteprima</div>
+      </div>
+      <p style="margin-top:2rem; font-size:0.82rem; color:var(--mid);">Non hai ancora un account? <a href="#ordine" style="color:var(--gold); text-decoration:none; font-weight:600;">Contattaci per aprirlo gratuitamente →</a></p>
+    </div>
+    <div class="b2b-login-card">
+      <h3>🔐 Accesso Clienti</h3>
+      <p>Inserisci le tue credenziali per accedere al tuo account riservato.</p>
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label>Email aziendale</label>
+        <input type="email" placeholder="tuamail@azienda.it">
+      </div>
+      <div class="form-group" style="margin-bottom:1.5rem;">
+        <label>Password</label>
+        <input type="password" placeholder="••••••••">
+      </div>
+      <button class="form-submit" style="margin-top:0;" onclick="alert('Area in fase di attivazione. Contattaci su WhatsApp per accedere al tuo account!')">Accedi all'Area Riservata</button>
+      <div class="b2b-features">
+        <div class="b2b-feat"><span class="icon">📋</span><span>I tuoi ordini</span></div>
+        <div class="b2b-feat"><span class="icon">🧾</span><span>Fatture</span></div>
+        <div class="b2b-feat"><span class="icon">🏷️</span><span>Listino prezzi</span></div>
+        <div class="b2b-feat"><span class="icon">🔔</span><span>Offerte</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="newsletter">
+  <div class="newsletter-text">
+    <h2>📬 Resta aggiornato sulle offerte</h2>
+    <p>Ogni mese promozioni esclusive, nuovi prodotti e consigli per la tua attività. Iscriviti gratis.</p>
+  </div>
+  <form class="newsletter-form" onsubmit="this.innerHTML='<span style=\'padding:1rem 2rem;font-weight:600;\'>✅ Iscritto! Grazie.</span>'; event.preventDefault();">
+    <input type="email" placeholder="La tua email professionale">
+    <button type="submit">Iscriviti</button>
+  </form>
+</div>
+
+<!-- BLOG -->
+<section class="blog" id="blog">
+  <div class="blog-header">
+    <div>
+      <div class="section-tag">Consigli & Aggiornamenti</div>
+      <h2 class="section-title">Dal nostro blog</h2>
+    </div>
+    <a href="#" class="btn-secondary">Tutti gli articoli →</a>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card featured">
+      <div class="blog-img">♻️<div class="blog-img-overlay"></div></div>
+      <div class="blog-body">
+        <div class="blog-tag">Normative</div>
+        <div class="blog-title">Addio plastica monouso: cosa cambia per bar e ristoranti nel 2024</div>
+        <p class="blog-excerpt">La direttiva SUP è già in vigore. Ecco un riepilogo completo di cosa è vietato, cosa è ancora permesso e come attrezzarsi con le alternative biodegradabili senza spendere di più.</p>
+        <div class="blog-meta"><span>📅 15 Novembre 2024</span><span>⏱ 5 min lettura</span></div>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img" style="background:var(--olive)">🍕<div class="blog-img-overlay"></div></div>
+      <div class="blog-body">
+        <div class="blog-tag">Asporto</div>
+        <div class="blog-title">Come scegliere il cartone pizza giusto per il tuo forno</div>
+        <p class="blog-excerpt">Non tutti i cartoni reggono le stesse temperature. Guida alla scelta in base al tipo di forno e di pizza.</p>
+        <div class="blog-meta"><span>📅 2 Nov 2024</span></div>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img" style="background:#7B6B52">🎨<div class="blog-img-overlay"></div></div>
+      <div class="blog-body">
+        <div class="blog-tag">Marketing</div>
+        <div class="blog-title">Perché la shopper brandizzata è il miglior investimento per un bar</div>
+        <p class="blog-excerpt">Ogni cliente che esce con la tua borsa è un manifesto ambulante. I numeri di chi l'ha già fatto.</p>
+        <div class="blog-meta"><span>📅 18 Ott 2024</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="categories" id="prodotti">
+  <div class="section-tag">Il Nostro Catalogo</div>
+  <h2 class="section-title">Tutto quello che serve<br>alla tua attività</h2>
+  <p class="section-sub">Un'ampia gamma di prodotti monouso selezionati per la qualità e la praticità quotidiana di bar, ristoranti, pizzerie, alberghi e negozi alimentari.</p>
+  <div class="cat-grid">
+    <div class="cat-item">
+      <span class="cat-icon">📄</span>
+      <div class="cat-name">Carta & Tovaglioli</div>
+      <p class="cat-desc">Tovaglioli, rotoli carta forno, carta per imballaggio, pellicole. In ogni formato e grammatura.</p>
+      <div class="cat-count">→ Vedi prodotti</div>
+    </div>
+    <div class="cat-item">
+      <span class="cat-icon">🍽️</span>
+      <div class="cat-name">Piatti & Posate</div>
+      <p class="cat-desc">Piatti in carta e plastica, posate monouso, vassoi e sottopiatti. Ideali per asporto ed eventi.</p>
+      <div class="cat-count">→ Vedi prodotti</div>
+    </div>
+    <div class="cat-item">
+      <span class="cat-icon">🥡</span>
+      <div class="cat-name">Contenitori Asporto</div>
+      <p class="cat-desc">Box pizza, contenitori per alimenti, vaschette alluminio, scatole pasticceria e finger food.</p>
+      <div class="cat-count">→ Vedi prodotti</div>
+    </div>
+    <div class="cat-item">
+      <span class="cat-icon">🛍️</span>
+      <div class="cat-name">Imballaggi & Buste</div>
+      <p class="cat-desc">Sacchetti alimentari, buste shopper, buste per pane e gastronomia, retine e sacchi.</p>
+      <div class="cat-count">→ Vedi prodotti</div>
+    </div>
+    <div class="cat-item">
+      <span class="cat-icon">🧹</span>
+      <div class="cat-name">Prodotti Pulizia</div>
+      <p class="cat-desc">Guanti in lattice e nitrile, mascherine, prodotti detergenti e igienizzanti professionali.</p>
+      <div class="cat-count">→ Vedi prodotti</div>
+    </div>
+    <div class="cat-item">
+      <span class="cat-icon">🎨</span>
+      <div class="cat-name">Articoli Brandizzati</div>
+      <p class="cat-desc">Shopper, bicchieri, box e tovaglioli con il tuo logo. Fai riconoscere il tuo locale ovunque.</p>
+      <div class="cat-count">→ Richiedi preventivo</div>
+    </div>
+  </div>
+</section>
+
+<!-- B2B -->
+<section class="b2b-section" id="ingrosso">
+  <div>
+    <div class="section-tag">Per Professionisti</div>
+    <h2 class="section-title">Il partner ideale per<br>la tua attività</h2>
+    <p class="section-sub">Che tu gestisca un bar, una pizzeria o un albergo, offriamo condizioni su misura per chi acquista professionalmente. Prezzi all'ingrosso, ordini ricorrenti, consegna programmata.</p>
+    <a href="#ordine" class="btn-primary" style="margin-top: 2rem; display: inline-flex;">Apri il tuo account B2B →</a>
+  </div>
+  <div class="b2b-benefits">
+    <div class="benefit">
+      <span class="benefit-icon">💰</span>
+      <div>
+        <h4>Prezzi all'ingrosso</h4>
+        <p>Listino dedicato per esercenti e rivenditori, con sconti crescenti in base ai volumi.</p>
+      </div>
+    </div>
+    <div class="benefit">
+      <span class="benefit-icon">🚚</span>
+      <div>
+        <h4>Spedizione in tutta Italia</h4>
+        <p>Consegniamo dal Sud al Nord. Ordini online con tracciamento e tempi certi.</p>
+      </div>
+    </div>
+    <div class="benefit">
+      <span class="benefit-icon">🔄</span>
+      <div>
+        <h4>Ordini ricorrenti</h4>
+        <p>Imposta i tuoi ordini fissi mensili e non pensarci più. Noi pensiamo a tutto.</p>
+      </div>
+    </div>
+    <div class="benefit">
+      <span class="benefit-icon">📞</span>
+      <div>
+        <h4>Supporto dedicato</h4>
+        <p>Un referente diretto su WhatsApp. Risposta rapida, nessuna attesa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRANDED -->
+<section class="branded" id="personalizzati">
+  <div class="branded-inner">
+    <div class="branded-visual">
+      <div class="sample-box">
+        <div class="sample-logo">La Tua Pizzeria</div>
+        <div class="sample-sub">il tuo logo qui</div>
+      </div>
+      <div class="sample-box2">
+        <div class="sample-logo" style="color:var(--dark)">🛍️ Shopper Personalizzata</div>
+      </div>
+    </div>
+    <div>
+      <div class="section-tag">Personalizzazione</div>
+      <h2 class="section-title">Il tuo brand su ogni<br>confezione</h2>
+      <p class="section-sub">Offriamo la possibilità di stampare il tuo logo su bicchieri, buste shopper, tovaglioli, box pizza e molto altro. Fai pubblicità ogni volta che un cliente porta a casa il tuo prodotto.</p>
+      <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2.5rem;">
+        <div style="display:flex; gap: 0.8rem; align-items:center; font-size:0.9rem;"><span style="color:var(--gold)">✓</span> Quantitativi minimi accessibili</div>
+        <div style="display:flex; gap: 0.8rem; align-items:center; font-size:0.9rem;"><span style="color:var(--gold)">✓</span> Studio grafica incluso</div>
+        <div style="display:flex; gap: 0.8rem; align-items:center; font-size:0.9rem;"><span style="color:var(--gold)">✓</span> Campioni gratuiti su richiesta</div>
+        <div style="display:flex; gap: 0.8rem; align-items:center; font-size:0.9rem;"><span style="color:var(--gold)">✓</span> Tempi di produzione rapidi</div>
+      </div>
+      <a href="#ordine" class="btn-primary">Richiedi preventivo gratuito →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="section-tag">Come funziona</div>
+  <h2 class="section-title">Ordina in 4 semplici passi</h2>
+  <p class="section-sub">Abbiamo reso il processo di ordine il più semplice possibile, sia per i privati che per le aziende.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Scegli i prodotti</h4>
+      <p>Sfoglia il catalogo e seleziona quello che ti serve, anche in grandi quantità.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Compila il modulo</h4>
+      <p>Inserisci i tuoi dati e i prodotti richiesti. Nessuna registrazione obbligatoria.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Ricevi il preventivo</h4>
+      <p>Ti contattiamo entro poche ore via WhatsApp o email con prezzi e disponibilità.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Ricevi la merce</h4>
+      <p>Spediamo in tutta Italia o organizziamo il ritiro in sede a Boscoreale (NA).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section class="order-section" id="ordine">
+  <div class="order-inner">
+    <div class="section-tag">Ordina Online</div>
+    <h2 class="section-title">Richiedi un preventivo</h2>
+    <p class="section-sub">Compila il modulo e ti risponderemo entro poche ore. Per urgenze scrivici direttamente su WhatsApp.</p>
+    <form class="form-grid" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label>Nome e Cognome *</label>
+        <input type="text" placeholder="Mario Rossi" required>
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" placeholder="mario@esempio.it" required>
+      </div>
+      <div class="form-group">
+        <label>Telefono / WhatsApp</label>
+        <input type="tel" placeholder="+39 333 0000000">
+      </div>
+      <div class="form-group">
+        <label>Tipo di Cliente</label>
+        <select>
+          <option>Bar / Caffetteria</option>
+          <option>Ristorante / Pizzeria</option>
+          <option>Hotel / B&B</option>
+          <option>Negozio Alimentare</option>
+          <option>Rivenditore</option>
+          <option>Privato</option>
+          <option>Altro</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Prodotti richiesti *</label>
+        <textarea placeholder="Descrivi i prodotti che ti interessano, le quantità e eventuali note particolari..."></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Personalizzazione (opzionale)</label>
+        <input type="text" placeholder="Hai bisogno di prodotti con il tuo logo? Indicalo qui">
+      </div>
+      <button type="submit" class="form-submit">📩 Invia Richiesta di Preventivo</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contatti">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">Ranieri <span>Carta</span> e Affini</a>
+      <p>Specializzati nella fornitura di carta, plastica monouso e imballaggi alimentari. Serviamo professionisti del food & beverage in tutta Italia dal nostro deposito di Boscoreale (NA).</p>
+    </div>
+    <div class="footer-col">
+      <h4>Prodotti</h4>
+      <ul>
+        <li><a href="#">Carta & Tovaglioli</a></li>
+        <li><a href="#">Piatti & Posate</a></li>
+        <li><a href="#">Contenitori Asporto</a></li>
+        <li><a href="#">Imballaggi & Buste</a></li>
+        <li><a href="#">Prodotti Pulizia</a></li>
+        <li><a href="#">Articoli Brandizzati</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Azienda</h4>
+      <ul>
+        <li><a href="#">Chi Siamo</a></li>
+        <li><a href="#">Ingrosso B2B</a></li>
+        <li><a href="#">Personalizzazione</a></li>
+        <li><a href="#">Come Ordinare</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contatti</h4>
+      <ul>
+        <li><a href="tel:+393336350643">📞 +39 333 6350643</a></li>
+        <li><a href="https://wa.me/393336350643">💬 WhatsApp</a></li>
+        <li><a href="mailto:f.lliranieri@live.it">✉️ f.lliranieri@live.it</a></li>
+        <li><a href="#">📍 Via M.T. di Calcutta, 80041 Boscoreale (NA)</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Ranieri Carta e Affini – P.IVA 10438101213</span>
+    <span><a href="#">Privacy Policy</a> · <a href="#">Cookie Policy</a></span>
+  </div>
+</footer>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/393336350643" class="wa-float" target="_blank" title="Scrivici su WhatsApp">💬</a>
+
+<script>
+  // Catalog filter
+  let quoteItems = [];
+  function filterProducts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.prod-card').forEach(card => {
+      card.style.display = (cat === 'tutti' || card.dataset.cat === cat) ? 'block' : 'none';
+    });
+  }
+  function addToQuote(name) {
+    if (!quoteItems.includes(name)) quoteItems.push(name);
+    const bar = document.getElementById('quoteBar');
+    bar.style.display = 'flex';
+    document.getElementById('quoteCount').textContent = `${quoteItems.length} prodott${quoteItems.length===1?'o':'i'} selezionat${quoteItems.length===1?'o':'i'}: ${quoteItems.join(', ')}`;
+  }
+
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = '✅ Richiesta inviata! Ti contatteremo presto.';
+    btn.style.background = 'var(--olive)';
+    btn.disabled = true;
+  }
+
+  // Scroll animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.cat-item, .benefit, .step, .review-card, .prod-card, .blog-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
