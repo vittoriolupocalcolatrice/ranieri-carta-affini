@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Ranieri – Strumento Ordini</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F1010;
+    --surface: #1A1C1C;
+    --surface2: #232626;
+    --border: rgba(255,255,255,0.07);
+    --gold: #E8B84B;
+    --gold-dim: rgba(232,184,75,0.12);
+    --green: #4CAF7D;
+    --red: #E05A5A;
+    --text: #F0EEEA;
+    --muted: #6B6F6F;
+    --white: #FFFFFF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-brand { display: flex; align-items: center; gap: 0.8rem; }
+  .header-logo {
+    width: 36px; height: 36px; background: var(--gold);
+    border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+  }
+  .header-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; }
+  .header-sub { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
+  .cart-btn {
+    position: relative; background: var(--gold-dim);
+    border: 1px solid rgba(232,184,75,0.3);
+    color: var(--gold); padding: 0.6rem 1rem;
+    border-radius: 8px; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; gap: 0.4rem;
+    transition: background 0.2s;
+  }
+  .cart-btn:hover { background: rgba(232,184,75,0.2); }
+  .cart-count {
+    background: var(--gold); color: var(--bg);
+    border-radius: 50%; width: 18px; height: 18px;
+    font-size: 0.65rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex; background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 0.8rem 1.2rem; font-size: 0.78rem; font-weight: 600;
+    color: var(--muted); cursor: pointer; white-space: nowrap;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* CLIENTE SECTION */
+  .cliente-section {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+  }
+  .cliente-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer;
+  }
+  .cliente-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .cliente-name { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-top: 0.2rem; }
+  .cliente-toggle-icon { color: var(--gold); font-size: 1.2rem; transition: transform 0.2s; }
+  .cliente-form { margin-top: 1rem; display: none; flex-direction: column; gap: 0.7rem; }
+  .cliente-form.open { display: flex; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+  .field { display: flex; flex-direction: column; gap: 0.3rem; }
+  .field label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .field input, .field select {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); padding: 0.7rem 0.9rem; border-radius: 8px;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; outline: none;
+    transition: border-color 0.2s;
+  }
+  .field input:focus, .field select:focus { border-color: var(--gold); }
+  .field input::placeholder { color: var(--muted); }
+  .field.full { grid-column: span 2; }
+  .save-cliente {
+    background: var(--gold); color: var(--bg);
+    border: none; border-radius: 8px; padding: 0.8rem;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; transition: opacity 0.2s; width: 100%;
+  }
+  .save-cliente:hover { opacity: 0.9; }
+
+  /* SEARCH */
+  .search-bar {
+    padding: 0.8rem 1.2rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .search-input {
+    width: 100%; background: var(--surface2);
+    border: 1px solid var(--border); color: var(--text);
+    padding: 0.7rem 1rem 0.7rem 2.5rem; border-radius: 8px;
+    font-family: 'Inter', sans-serif; font-size: 0.88rem; outline: none;
+    transition: border-color 0.2s; position: relative;
+  }
+  .search-wrap { position: relative; }
+  .search-icon { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.9rem; pointer-events: none; }
+  .search-input:focus { border-color: var(--gold); }
+  .search-input::placeholder { color: var(--muted); }
+
+  /* SCONTO GLOBALE */
+  .sconto-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .sconto-toggle {
+    padding: 0.8rem 1.2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .sconto-toggle:active { background: var(--surface2); }
+  .sconto-toggle-left { display: flex; align-items: center; gap: 0.6rem; }
+  .sconto-toggle-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); }
+  .sconto-active-badge {
+    background: var(--gold); color: var(--bg);
+    font-size: 0.65rem; font-weight: 800; padding: 0.15rem 0.5rem;
+    border-radius: 20px; display: none;
+  }
+  .sconto-toggle-icon { color: var(--gold); font-size: 0.8rem; transition: transform 0.2s; }
+  .sconto-toggle-icon.open { transform: rotate(180deg); }
+  .sconto-content {
+    display: none; padding: 0 1.2rem 0.8rem;
+    background: var(--gold-dim);
+    border-top: 1px solid rgba(232,184,75,0.1);
+  }
+  .sconto-content.open { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; padding-top: 0.8rem; }
+  .sconto-label { font-size: 0.78rem; font-weight: 600; color: var(--gold); white-space: nowrap; }
+  .sconto-options { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .sconto-opt {
+    padding: 0.35rem 0.8rem; border-radius: 20px;
+    border: 1px solid rgba(232,184,75,0.3);
+    font-size: 0.72rem; font-weight: 600; cursor: pointer;
+    background: transparent; color: var(--gold); transition: all 0.2s;
+  }
+  .sconto-opt:hover, .sconto-opt.active { background: var(--gold); color: var(--bg); }
+  .sconto-custom {
+    background: var(--surface2); border: 1px solid rgba(232,184,75,0.3);
+    color: var(--gold); padding: 0.35rem 0.6rem; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 600; width: 60px; outline: none;
+    text-align: center; font-family: 'Inter', sans-serif;
+  }
+
+  /* PRODUCTS LIST */
+  .products { padding: 0.5rem 0; }
+  .prod-item {
+    display: flex; align-items: center; gap: 0.9rem;
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .prod-item:active { background: var(--surface); }
+  .prod-thumb {
+    width: 64px; height: 64px; flex-shrink: 0;
+    background: var(--surface2); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; position: relative; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .prod-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+  .prod-badge {
+    position: absolute; top: 2px; left: 2px;
+    background: var(--green); color: white;
+    font-size: 0.5rem; font-weight: 800; padding: 0.1rem 0.3rem;
+    border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .prod-info { flex: 1; min-width: 0; }
+  .prod-cat { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.15rem; }
+  .prod-name { font-size: 0.88rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .prod-desc { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .prod-pricing { display: flex; align-items: center; gap: 0.6rem; }
+  .prod-price-original { font-size: 0.72rem; color: var(--muted); text-decoration: line-through; }
+  .prod-price-final { font-size: 1rem; font-weight: 700; color: var(--green); }
+  .prod-price-only { font-size: 1rem; font-weight: 700; color: var(--text); }
+  .prod-controls { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+  .qty-ctrl { display: flex; align-items: center; gap: 0; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; }
+  .qty-btn {
+    width: 28px; height: 28px; border: none; background: transparent;
+    color: var(--text); font-size: 1.1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s; font-weight: 300;
+  }
+  .qty-btn:hover { background: var(--border); }
+  .qty-num { font-size: 0.85rem; font-weight: 600; min-width: 24px; text-align: center; color: var(--text); }
+  .add-btn {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--gold); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; color: var(--bg); font-weight: 700;
+    transition: all 0.2s; line-height: 1;
+  }
+  .add-btn:hover { background: var(--green); }
+  .add-btn.added { background: var(--green); font-size: 0.9rem; }
+
+  /* EMPTY */
+  .empty-state {
+    text-align: center; padding: 4rem 2rem;
+    color: var(--muted); font-size: 0.9rem;
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+
+  /* CART PANEL */
+  .cart-panel {
+    position: fixed; inset: 0; z-index: 200;
+    display: none; flex-direction: column;
+  }
+  .cart-panel.open { display: flex; }
+  .cart-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  }
+  .cart-drawer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: var(--surface); border-radius: 20px 20px 0 0;
+    max-height: 90vh; display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .cart-handle {
+    width: 36px; height: 4px; background: var(--border);
+    border-radius: 2px; margin: 0.8rem auto 0;
+  }
+  .cart-header {
+    padding: 1rem 1.2rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; }
+  .cart-close { background: var(--surface2); border: none; color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+  .pagamento-section {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .pagamento-label {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.7rem;
+  }
+  .pagamento-options {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;
+  }
+  .pagamento-opt {
+    display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+    padding: 0.6rem 0.3rem; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface2);
+    cursor: pointer; transition: all 0.2s; text-align: center;
+  }
+  .pagamento-opt:hover { border-color: var(--gold); }
+  .pagamento-opt.active { border-color: var(--gold); background: var(--gold-dim); }
+  .pag-icon { font-size: 1.2rem; }
+  .pagamento-opt span:last-child { font-size: 0.62rem; font-weight: 600; color: var(--muted); }
+  .pagamento-opt.active span:last-child { color: var(--gold); }
+  .contrassegno-note {
+    background: rgba(232,184,75,0.08); border: 1px solid rgba(232,184,75,0.2);
+    border-radius: 8px; padding: 0.6rem 0.8rem;
+    font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem;
+    display: none;
+  }
+  .contrassegno-note.visible { display: block; }
+
+  .cart-items { flex: 1; overflow-y: auto; padding: 0.5rem 0; }
+  .cart-item {
+    display: flex; align-items: center; gap: 0.8rem;
+    padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--border);
+  }
+  .cart-item-emoji { font-size: 1.5rem; width: 40px; text-align: center; flex-shrink: 0; }
+  .cart-item-info { flex: 1; min-width: 0; }
+  .cart-item-name { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cart-item-detail { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+  .cart-item-price { font-size: 0.9rem; font-weight: 700; color: var(--green); flex-shrink: 0; }
+  .cart-item-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 0.3rem; flex-shrink: 0; }
+  .cart-summary {
+    padding: 1rem 1.2rem; border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .summary-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.85rem; }
+  .summary-row.total { font-size: 1.1rem; font-weight: 700; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid var(--border); }
+  .summary-row .label { color: var(--muted); }
+  .summary-row.total .label { color: var(--text); }
+  .summary-row .value { color: var(--green); font-weight: 600; }
+  .summary-row.total .value { font-size: 1.3rem; }
+  .whatsapp-btn {
+    width: 100%; padding: 1rem; margin-top: 1rem;
+    background: #25D366; color: white; border: none; border-radius: 12px;
+    font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    gap: 0.5rem; transition: opacity 0.2s;
+  }
+  .whatsapp-btn:hover { opacity: 0.9; }
+  .whatsapp-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .cliente-warning {
+    background: rgba(224,90,90,0.1); border: 1px solid rgba(224,90,90,0.3);
+    color: var(--red); border-radius: 8px; padding: 0.7rem 1rem;
+    font-size: 0.78rem; font-weight: 500; margin-top: 0.8rem; text-align: center;
+    display: none;
+  }
+
+  /* STICKY ORDER BAR */
+  .order-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 0.8rem 1.2rem;
+    display: none; align-items: center; justify-content: space-between;
+    gap: 1rem;
+  }
+  .order-bar.visible { display: flex; }
+  .order-bar-info { flex: 1; }
+  .order-bar-count { font-size: 0.72rem; color: var(--muted); }
+  .order-bar-total { font-size: 1.1rem; font-weight: 700; color: var(--green); }
+  .order-bar-btn {
+    background: #25D366; color: white; border: none;
+    padding: 0.8rem 1.2rem; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  /* SECTION HIDDEN */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  @media (min-width: 600px) {
+    .cart-drawer { max-width: 480px; margin: 0 auto; }
+    .products { max-width: 600px; margin: 0 auto; }
+    .header, .tabs, .search-bar, .sconto-bar, .cliente-section { max-width: 600px; margin-left: auto; margin-right: auto; }
+    .order-bar { max-width: 600px; left: 50%; transform: translateX(-50%); border-radius: 12px 12px 0 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-brand">
+    <div class="header-logo">📦</div>
+    <div>
+      <div class="header-title">Ranieri Carta</div>
+      <div class="header-sub">Strumento ordini — Vittorio</div>
+    </div>
+  </div>
+  <button class="cart-btn" onclick="toggleCart()">
+    🛒 Ordine
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+</div>
+
+<!-- CLIENTE -->
+<div class="cliente-section">
+  <div class="cliente-toggle" onclick="toggleCliente()">
+    <div>
+      <div class="cliente-label">Cliente attivo</div>
+      <div class="cliente-name" id="clienteDisplay">➕ Inserisci cliente</div>
+    </div>
+    <div class="cliente-toggle-icon" id="clienteIcon">▾</div>
+  </div>
+  <div class="cliente-form" id="clienteForm">
+    <div class="form-row">
+      <div class="field">
+        <label>Nome *</label>
+        <input type="text" id="c_nome" placeholder="Mario Rossi">
+      </div>
+      <div class="field">
+        <label>Attività *</label>
+        <input type="text" id="c_attivita" placeholder="Bar Roma">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Telefono</label>
+        <input type="tel" id="c_tel" placeholder="+39 333 000000">
+      </div>
+      <div class="field">
+        <label>Città</label>
+        <input type="text" id="c_citta" placeholder="Napoli">
+      </div>
+    </div>
+    <div class="field full">
+      <label>Tipo attività</label>
+      <select id="c_tipo">
+        <option>Bar / Caffetteria</option>
+        <option>Ristorante</option>
+        <option>Pizzeria / Pub</option>
+        <option>Hotel / B&B</option>
+        <option>Negozio Alimentare</option>
+        <option>Pasticceria</option>
+        <option>Gelateria</option>
+        <option>Altro</option>
+      </select>
+    </div>
+    <button class="save-cliente" onclick="saveCliente()">✓ Salva Cliente</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="filterCat('tutti', this)">Tutti</div>
+  <div class="tab" onclick="filterCat('bar', this)">Bar</div>
+  <div class="tab" onclick="filterCat('ristorazione', this)">Ristorazione</div>
+  <div class="tab" onclick="filterCat('pizzeria', this)">Pizzeria</div>
+  <div class="tab" onclick="filterCat('imballaggio', this)">Imballaggio</div>
+  <div class="tab" onclick="filterCat('gelateria', this)">Gelateria</div>
+  <div class="tab" onclick="filterCat('igiene', this)">Igiene</div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="searchInput" type="text" placeholder="Cerca prodotto..." oninput="searchProducts()">
+  </div>
+</div>
+
+<!-- SCONTO GLOBALE -->
+<div class="sconto-bar">
+  <div class="sconto-toggle" onclick="toggleSconto()">
+    <div class="sconto-toggle-left">
+      <span class="sconto-toggle-label">🏷️ Applica Sconto</span>
+      <span class="sconto-active-badge" id="scontoBadge">0%</span>
+    </div>
+    <span class="sconto-toggle-icon" id="scontoIcon">▾</span>
+  </div>
+  <div class="sconto-content" id="scontoContent">
+    <div class="sconto-options">
+      <button class="sconto-opt active" onclick="setSconto(0, this)">Nessuno</button>
+      <button class="sconto-opt" onclick="setSconto(5, this)">5%</button>
+      <button class="sconto-opt" onclick="setSconto(10, this)">10%</button>
+      <button class="sconto-opt" onclick="setSconto(15, this)">15%</button>
+      <button class="sconto-opt" onclick="setSconto(20, this)">20%</button>
+      <input class="sconto-custom" id="scontoCustom" type="number" min="0" max="99" placeholder="%" oninput="setSconto(this.value, null)">
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products" id="productsList"></div>
+
+<!-- CART PANEL -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-overlay" onclick="toggleCart()"></div>
+  <div class="cart-drawer">
+    <div class="cart-handle"></div>
+    <div class="cart-header">
+      <div class="cart-title">📋 Riepilogo Ordine</div>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-summary">
+      <div class="pagamento-section">
+        <div class="pagamento-label">💳 Modalità di pagamento</div>
+        <div class="pagamento-options">
+          <div class="pagamento-opt active" onclick="selectPagamento('carta', this)">
+            <span class="pag-icon">💳</span>
+            <span>Carta</span>
+          </div>
+          <div class="pagamento-opt" onclick="selectPagamento('paypal', this)">
+            <span class="pag-icon">🅿️</span>
+            <span>PayPal</span>
+          </div>
+          <div class="pagamento-opt" onclick="selectPagamento('applepay', this)">
+            <span class="pag-icon">🍎</span>
+            <span>Apple Pay</span>
+          </div>
+          <div class="pagamento-opt" onclick="selectPagamento('googlepay', this)">
+            <span class="pag-icon">🔵</span>
+            <span>Google Pay</span>
+          </div>
+          <div class="pagamento-opt" onclick="selectPagamento('klarna', this)">
+            <span class="pag-icon">🟣</span>
+            <span>Klarna</span>
+          </div>
+          <div class="pagamento-opt" onclick="selectPagamento('contrassegno', this)">
+            <span class="pag-icon">💵</span>
+            <span>Contrassegno</span>
+          </div>
+          <div class="pagamento-opt" onclick="selectPagamento('bonifico', this)">
+            <span class="pag-icon">🏦</span>
+            <span>Bonifico</span>
+          </div>
+        </div>
+        <div class="contrassegno-note" id="contrassegnoNote">
+          💵 Il pagamento avverrà in contanti al momento della consegna. Assicurati di avere l'importo esatto.
+        </div>
+      </div>
+      <div class="summary-row">
+        <span class="label">Prezzo listino</span>
+        <span class="value" id="summaryListino">€0,00</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Sconto applicato</span>
+        <span class="value" id="summarySconto" style="color:var(--red)">-€0,00</span>
+      </div>
+      <div class="summary-row total">
+        <span class="label">Totale cliente</span>
+        <span class="value" id="summaryTotale">€0,00</span>
+      </div>
+      <div class="cliente-warning" id="clienteWarning">
+        ⚠️ Inserisci i dati del cliente prima di inviare l'ordine
+      </div>
+      <button class="whatsapp-btn" onclick="sendWhatsApp()">
+        💬 Invia Ordine su WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY ORDER BAR -->
+<div class="order-bar" id="orderBar">
+  <div class="order-bar-info">
+    <div class="order-bar-count" id="orderBarCount">0 prodotti</div>
+    <div class="order-bar-total" id="orderBarTotal">€0,00</div>
+  </div>
+  <button class="order-bar-btn" onclick="toggleCart()">
+    📋 Vedi ordine
+  </button>
+</div>
+
+<script>
+// =====================
+// DATI PRODOTTI
+// (da aggiornare con prodotti reali di Ranieri)
+// =====================
+const PRODOTTI = [
+  // BAR
+  { id:1, cat:'bar', emoji:'☕', nome:'Bicchieri in Carta Avana 250ml', desc:'Conf. 50 pz · Per caffè e bevande calde', prezzo:4.50, um:'cf' },
+  { id:2, cat:'bar', emoji:'🥤', nome:'Bicchieri Plastica Trasparente 200ml', desc:'Conf. 100 pz · Per bibite fredde', prezzo:3.20, um:'cf' },
+  { id:3, cat:'bar', emoji:'🧋', nome:'Bicchieri Carta Doppia Parete 300ml', desc:'Conf. 25 pz · Termici, asporto', prezzo:5.90, um:'cf' },
+  { id:4, cat:'bar', emoji:'🍭', nome:'Palette Mescolatori Plastica', desc:'Conf. 1000 pz · Per caffè e cocktail', prezzo:2.80, um:'cf' },
+  { id:5, cat:'bar', emoji:'🧻', nome:'Tovaglioli Carta 33x33 2 Veli', desc:'Conf. 100 pz · Bianchi, per bar', prezzo:1.90, um:'cf' },
+
+  // RISTORAZIONE
+  { id:6, cat:'ristorazione', emoji:'🍽️', nome:'Piatti Carta Bianchi 23cm', desc:'Conf. 50 pz · Rotondi, per secondi', prezzo:3.50, um:'cf' },
+  { id:7, cat:'ristorazione', emoji:'🥄', nome:'Posate Plastica Set Completo', desc:'Conf. 50 set · Forchetta, coltello, cucchiaio', prezzo:4.20, um:'cf' },
+  { id:8, cat:'ristorazione', emoji:'📜', nome:'Tovaglie Carta 100x100', desc:'Conf. 50 pz · Bianche, per ristoranti', prezzo:6.80, um:'cf' },
+  { id:9, cat:'ristorazione', emoji:'🥡', nome:'Contenitori Asporto 1000ml', desc:'Conf. 50 pz · Con coperchio, microonde', prezzo:8.90, um:'cf' },
+  { id:10, cat:'ristorazione', emoji:'🧴', nome:'Vaschette Alluminio 500ml', desc:'Conf. 100 pz · Con coperchio, forno e freezer', prezzo:11.50, um:'cf' },
+
+  // PIZZERIA
+  { id:11, cat:'pizzeria', emoji:'🍕', nome:'Cartoni Pizza 33cm', desc:'Conf. 100 pz · Ondulato bianco, fino 300°C', prezzo:8.50, um:'cf' },
+  { id:12, cat:'pizzeria', emoji:'🍕', nome:'Cartoni Pizza 40cm', desc:'Conf. 100 pz · Formato maxi', prezzo:11.20, um:'cf' },
+  { id:13, cat:'pizzeria', emoji:'📦', nome:'Buste Termiche Pizza', desc:'Conf. 50 pz · Per consegna a domicilio', prezzo:9.90, um:'cf' },
+  { id:14, cat:'pizzeria', emoji:'🧻', nome:'Carta Forno Silicone 50mt', desc:'Rotolo 50mt x 38cm · Antiaderente 220°C', prezzo:4.20, um:'rt' },
+  { id:15, cat:'pizzeria', emoji:'🥤', nome:'Bicchieri Carta 400ml', desc:'Conf. 50 pz · Per bibite grandi formato pub', prezzo:5.40, um:'cf' },
+
+  // IMBALLAGGIO
+  { id:16, cat:'imballaggio', emoji:'🛍️', nome:'Buste Shopper HDPE 30x60', desc:'Conf. 500 pz · Polietilene alta densità', prezzo:5.20, um:'cf' },
+  { id:17, cat:'imballaggio', emoji:'📦', nome:'Sacchetti Carta Kraft Pane', desc:'Conf. 500 pz · Per panifici e gastronomie', prezzo:7.80, um:'cf' },
+  { id:18, cat:'imballaggio', emoji:'🎁', nome:'Sacchetti Plastica Trasparenti', desc:'Conf. 1000 pz · Varie misure', prezzo:4.50, um:'cf' },
+  { id:19, cat:'imballaggio', emoji:'📮', nome:'Scatole Cartone per Pizza', desc:'Conf. 50 pz · Per pasticceria e dolci', prezzo:12.00, um:'cf' },
+  { id:20, cat:'imballaggio', emoji:'🎀', nome:'Nastro Adesivo Imballo 48mm', desc:'Conf. 36 pz · Trasparente, resistente', prezzo:35.99, um:'cf' },
+
+  // GELATERIA
+  { id:21, cat:'gelateria', emoji:'🍦', nome:'Coppette Carta per Gelato S', desc:'Conf. 50 pz · Formato piccolo 150ml', prezzo:3.80, um:'cf' },
+  { id:22, cat:'gelateria', emoji:'🍨', nome:'Coppette Carta per Gelato M', desc:'Conf. 50 pz · Formato medio 250ml', prezzo:4.60, um:'cf' },
+  { id:23, cat:'gelateria', emoji:'🍧', nome:'Coni Cialda per Gelato', desc:'Conf. 100 pz · Classici croccanti', prezzo:5.20, um:'cf' },
+  { id:24, cat:'gelateria', emoji:'🥄', nome:'Palette Gelato Plastica', desc:'Conf. 1000 pz · Colorate, per gelaterie', prezzo:2.50, um:'cf' },
+
+  // IGIENE
+  { id:25, cat:'igiene', emoji:'🧤', nome:'Guanti Nitrile Neri Taglia M', desc:'Conf. 100 pz · Senza polvere', prezzo:6.50, um:'cf' },
+  { id:26, cat:'igiene', emoji:'🧤', nome:'Guanti Lattice Trasparenti', desc:'Conf. 100 pz · Monouso, alimentari', prezzo:4.20, um:'cf' },
+  { id:27, cat:'igiene', emoji:'🧴', nome:'Igienizzante Mani Gel 500ml', desc:'Conf. 12 pz · Battericida profumazione neutra', prezzo:14.90, um:'cf' },
+  { id:28, cat:'igiene', emoji:'😷', nome:'Mascherine Chirurgiche', desc:'Conf. 50 pz · Tipo II, certificate', prezzo:3.90, um:'cf' },
+];
+
+// =====================
+// STATO APP
+// =====================
+let cart = {};
+let sconto = 0;
+let currentCat = 'tutti';
+let cliente = { nome:'', attivita:'', tel:'', citta:'', tipo:'' };
+let clienteSet = false;
+let pagamento = 'carta';
+
+// =====================
+// RENDER PRODOTTI
+// =====================
+function renderProducts(lista) {
+  const container = document.getElementById('productsList');
+  if (lista.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">🔍</div>Nessun prodotto trovato</div>`;
+    return;
+  }
+  container.innerHTML = lista.map(p => {
+    const prezzoFinale = sconto > 0 ? p.prezzo * (1 - sconto/100) : p.prezzo;
+    const inCart = cart[p.id] && cart[p.id].qty > 0;
+    const qty = inCart ? cart[p.id].qty : 0;
+    return `
+    <div class="prod-item" id="item-${p.id}">
+      <div class="prod-thumb">${p.emoji}</div>
+      <div class="prod-info">
+        <div class="prod-cat">${catLabel(p.cat)}</div>
+        <div class="prod-name">${p.nome}</div>
+        <div class="prod-desc">${p.desc}</div>
+        <div class="prod-pricing">
+          ${sconto > 0 ? `<span class="prod-price-original">€${p.prezzo.toFixed(2)}</span>` : ''}
+          <span class="${sconto > 0 ? 'prod-price-final' : 'prod-price-only'}">€${prezzoFinale.toFixed(2)}/${p.um}</span>
+          ${sconto > 0 ? `<span style="font-size:0.68rem;background:rgba(76,175,125,0.15);color:var(--green);padding:0.15rem 0.4rem;border-radius:4px;font-weight:600;">-${sconto}%</span>` : ''}
+        </div>
+      </div>
+      <div class="prod-controls">
+        ${inCart ? `
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+            <span class="qty-num">${qty}</span>
+            <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+          </div>
+        ` : `
+          <button class="add-btn" onclick="addToCart(${p.id})">+</button>
+        `}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function catLabel(cat) {
+  const map = { bar:'Bar', ristorazione:'Ristorazione', pizzeria:'Pizzeria/Pub', imballaggio:'Imballaggio', gelateria:'Gelateria', igiene:'Igiene' };
+  return map[cat] || cat;
+}
+
+function getFiltered() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  return PRODOTTI.filter(p => {
+    const catOk = currentCat === 'tutti' || p.cat === currentCat;
+    const searchOk = !q || p.nome.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+    return catOk && searchOk;
+  });
+}
+
+function refreshList() { renderProducts(getFiltered()); }
+
+// =====================
+// FILTRI
+// =====================
+function filterCat(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  refreshList();
+}
+
+function searchProducts() { refreshList(); }
+
+// =====================
+// SCONTO TOGGLE
+// =====================
+function toggleSconto() {
+  const content = document.getElementById('scontoContent');
+  const icon = document.getElementById('scontoIcon');
+  content.classList.toggle('open');
+  icon.classList.toggle('open');
+}
+
+// =====================
+// SCONTO
+// =====================
+function setSconto(val, btn) {
+  sconto = parseFloat(val) || 0;
+  if (btn) {
+    document.querySelectorAll('.sconto-opt').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('scontoCustom').value = '';
+  }
+  // aggiorna badge
+  const badge = document.getElementById('scontoBadge');
+  if (sconto > 0) {
+    badge.style.display = 'inline-block';
+    badge.textContent = `-${sconto}%`;
+  } else {
+    badge.style.display = 'none';
+  }
+  // aggiorna prezzi nel carrello
+  Object.keys(cart).forEach(id => {
+    const p = PRODOTTI.find(x => x.id == id);
+    if (p) cart[id].prezzoFinale = sconto > 0 ? p.prezzo * (1 - sconto/100) : p.prezzo;
+  });
+  refreshList();
+  updateOrderBar();
+}
+
+// =====================
+// CARRELLO
+// =====================
+function addToCart(id) {
+  const p = PRODOTTI.find(x => x.id === id);
+  const prezzoFinale = sconto > 0 ? p.prezzo * (1 - sconto/100) : p.prezzo;
+  cart[id] = { ...p, qty: 1, prezzoFinale };
+  refreshList();
+  updateOrderBar();
+}
+
+function changeQty(id, delta) {
+  if (!cart[id]) return;
+  cart[id].qty += delta;
+  if (cart[id].qty <= 0) {
+    delete cart[id];
+  }
+  refreshList();
+  updateOrderBar();
+}
+
+function updateOrderBar() {
+  const items = Object.values(cart);
+  const count = items.reduce((s, i) => s + i.qty, 0);
+  const total = items.reduce((s, i) => s + i.prezzoFinale * i.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('orderBarCount').textContent = `${count} prodott${count===1?'o':'i'}`;
+  document.getElementById('orderBarTotal').textContent = `€${total.toFixed(2)}`;
+  const bar = document.getElementById('orderBar');
+  bar.classList.toggle('visible', count > 0);
+}
+
+// =====================
+// CART PANEL
+// =====================
+function toggleCart() {
+  const panel = document.getElementById('cartPanel');
+  const isOpen = panel.classList.toggle('open');
+  if (isOpen) renderCart();
+}
+
+function renderCart() {
+  const items = Object.values(cart);
+  const container = document.getElementById('cartItems');
+
+  if (items.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">🛒</div>Nessun prodotto selezionato</div>`;
+  } else {
+    container.innerHTML = items.map(i => `
+      <div class="cart-item">
+        <div class="cart-item-emoji">${i.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${i.nome}</div>
+          <div class="cart-item-detail">${i.qty} ${i.um} × €${i.prezzoFinale.toFixed(2)}${sconto > 0 ? ` <span style="color:var(--green)">(-${sconto}%)</span>` : ''}</div>
+        </div>
+        <div class="cart-item-price">€${(i.prezzoFinale * i.qty).toFixed(2)}</div>
+        <button class="cart-item-remove" onclick="removeFromCart(${i.id})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  const totListino = items.reduce((s, i) => s + i.prezzo * i.qty, 0);
+  const totFinale = items.reduce((s, i) => s + i.prezzoFinale * i.qty, 0);
+  const risparmio = totListino - totFinale;
+
+  document.getElementById('summaryListino').textContent = `€${totListino.toFixed(2)}`;
+  document.getElementById('summarySconto').textContent = risparmio > 0 ? `-€${risparmio.toFixed(2)}` : '-€0,00';
+  document.getElementById('summaryTotale').textContent = `€${totFinale.toFixed(2)}`;
+}
+
+function removeFromCart(id) {
+  delete cart[id];
+  renderCart();
+  refreshList();
+  updateOrderBar();
+}
+
+// =====================
+// CLIENTE
+// =====================
+function toggleCliente() {
+  const form = document.getElementById('clienteForm');
+  const icon = document.getElementById('clienteIcon');
+  form.classList.toggle('open');
+  icon.textContent = form.classList.contains('open') ? '▴' : '▾';
+}
+
+function saveCliente() {
+  cliente.nome = document.getElementById('c_nome').value.trim();
+  cliente.attivita = document.getElementById('c_attivita').value.trim();
+  cliente.tel = document.getElementById('c_tel').value.trim();
+  cliente.citta = document.getElementById('c_citta').value.trim();
+  cliente.tipo = document.getElementById('c_tipo').value;
+
+  if (!cliente.nome || !cliente.attivita) {
+    alert('Inserisci almeno nome e attività del cliente');
+    return;
+  }
+
+  clienteSet = true;
+  document.getElementById('clienteDisplay').textContent = `${cliente.attivita} – ${cliente.nome}`;
+  toggleCliente();
+}
+
+// =====================
+// PAGAMENTO
+// =====================
+function selectPagamento(tipo, el) {
+  pagamento = tipo;
+  document.querySelectorAll('.pagamento-opt').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const note = document.getElementById('contrassegnoNote');
+  note.classList.toggle('visible', tipo === 'contrassegno');
+}
+
+// =====================
+// WHATSAPP
+// =====================
+function sendWhatsApp() {
+  const items = Object.values(cart);
+
+  if (!clienteSet || !cliente.nome) {
+    document.getElementById('clienteWarning').style.display = 'block';
+    return;
+  }
+
+  if (items.length === 0) {
+    alert('Aggiungi almeno un prodotto all\'ordine');
+    return;
+  }
+
+  const totListino = items.reduce((s, i) => s + i.prezzo * i.qty, 0);
+  const totFinale = items.reduce((s, i) => s + i.prezzoFinale * i.qty, 0);
+  const risparmio = totListino - totFinale;
+
+  const pagMap = { carta:'💳 Carta di credito/debito', paypal:'🅿️ PayPal', applepay:'🍎 Apple Pay', googlepay:'🔵 Google Pay', klarna:'🟣 Klarna', contrassegno:'💵 Contrassegno alla consegna', bonifico:'🏦 Bonifico bancario' };
+
+  let msg = `🧾 *NUOVO ORDINE*\n`;
+  msg += `━━━━━━━━━━━━━━━━\n`;
+  msg += `👤 *Cliente:* ${cliente.nome}\n`;
+  msg += `🏪 *Attività:* ${cliente.attivita} (${cliente.tipo})\n`;
+  if (cliente.citta) msg += `📍 *Città:* ${cliente.citta}\n`;
+  if (cliente.tel) msg += `📞 *Tel:* ${cliente.tel}\n`;
+  msg += `💳 *Pagamento:* ${pagMap[pagamento]}\n`;
+  msg += `━━━━━━━━━━━━━━━━\n`;
+  msg += `*PRODOTTI ORDINATI:*\n\n`;
+
+  items.forEach(i => {
+    msg += `${i.emoji} *${i.nome}*\n`;
+    msg += `   Qtà: ${i.qty} ${i.um}`;
+    if (sconto > 0) {
+      msg += ` | Prezzo listino: €${i.prezzo.toFixed(2)} | *Prezzo cliente: €${i.prezzoFinale.toFixed(2)}*`;
+    } else {
+      msg += ` | Prezzo: €${i.prezzoFinale.toFixed(2)}`;
+    }
+    msg += ` | Subtot: €${(i.prezzoFinale * i.qty).toFixed(2)}\n\n`;
+  });
+
+  msg += `━━━━━━━━━━━━━━━━\n`;
+  if (sconto > 0) {
+    msg += `💰 Prezzo listino: €${totListino.toFixed(2)}\n`;
+    msg += `🎁 Sconto applicato (${sconto}%): -€${risparmio.toFixed(2)}\n`;
+  }
+  msg += `✅ *TOTALE: €${totFinale.toFixed(2)}*\n`;
+  msg += `━━━━━━━━━━━━━━━━\n`;
+  msg += `Ordine inviato tramite app Vittorio Lupo`;
+
+  const phone = '393336350643';
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+// =====================
+// INIT
+// =====================
+renderProducts(PRODOTTI);
+</script>
+</body>
+</html>
