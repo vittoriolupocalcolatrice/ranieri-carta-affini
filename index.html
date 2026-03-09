@@ -133,46 +133,28 @@
   .sconto-bar {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    overflow: hidden;
   }
   .sconto-toggle {
     padding: 0.8rem 1.2rem;
     display: flex; align-items: center; justify-content: space-between;
-    cursor: pointer; transition: background 0.15s; user-select: none;
+    cursor: pointer; transition: background 0.15s;
   }
-  .sconto-toggle:hover { background: var(--surface2); }
-  .sconto-toggle.has-sconto { background: rgba(232,184,75,0.06); }
+  .sconto-toggle:active { background: var(--surface2); }
   .sconto-toggle-left { display: flex; align-items: center; gap: 0.6rem; }
   .sconto-toggle-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); }
   .sconto-active-badge {
     background: var(--gold); color: var(--bg);
     font-size: 0.65rem; font-weight: 800; padding: 0.15rem 0.5rem;
     border-radius: 20px; display: none;
-    animation: badgePop 0.25s cubic-bezier(0.34,1.56,0.64,1);
   }
-  @keyframes badgePop {
-    from { transform: scale(0.5); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
-  }
-  .sconto-toggle-right { display: flex; align-items: center; gap: 0.5rem; }
-  .sconto-toggle-icon { color: var(--gold); font-size: 0.75rem; transition: transform 0.25s ease; }
+  .sconto-toggle-icon { color: var(--gold); font-size: 0.8rem; transition: transform 0.2s; }
   .sconto-toggle-icon.open { transform: rotate(180deg); }
   .sconto-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+    display: none; padding: 0 1.2rem 0.8rem;
     background: var(--gold-dim);
-    border-top: 0px solid rgba(232,184,75,0.1);
-    opacity: 0;
-    padding: 0 1.2rem;
+    border-top: 1px solid rgba(232,184,75,0.1);
   }
-  .sconto-content.open {
-    max-height: 100px;
-    padding: 0.8rem 1.2rem;
-    border-top-width: 1px;
-    opacity: 1;
-  }
-  .sconto-inner { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .sconto-content.open { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; padding-top: 0.8rem; }
   .sconto-label { font-size: 0.78rem; font-weight: 600; color: var(--gold); white-space: nowrap; }
   .sconto-options { display: flex; gap: 0.5rem; flex-wrap: wrap; }
   .sconto-opt {
@@ -462,22 +444,18 @@
   <div class="sconto-toggle" onclick="toggleSconto()">
     <div class="sconto-toggle-left">
       <span class="sconto-toggle-label">🏷️ Applica Sconto</span>
+      <span class="sconto-active-badge" id="scontoBadge">0%</span>
     </div>
-    <div class="sconto-toggle-right">
-      <span class="sconto-active-badge" id="scontoBadge"></span>
-      <span class="sconto-toggle-icon" id="scontoIcon">▾</span>
-    </div>
+    <span class="sconto-toggle-icon" id="scontoIcon">▾</span>
   </div>
   <div class="sconto-content" id="scontoContent">
-    <div class="sconto-inner">
-      <div class="sconto-options">
-        <button class="sconto-opt active" onclick="setSconto(0, this)">Nessuno</button>
-        <button class="sconto-opt" onclick="setSconto(5, this)">5%</button>
-        <button class="sconto-opt" onclick="setSconto(10, this)">10%</button>
-        <button class="sconto-opt" onclick="setSconto(15, this)">15%</button>
-        <button class="sconto-opt" onclick="setSconto(20, this)">20%</button>
-        <input class="sconto-custom" id="scontoCustom" type="number" min="0" max="99" placeholder="%" oninput="setSconto(this.value, null)">
-      </div>
+    <div class="sconto-options">
+      <button class="sconto-opt active" onclick="setSconto(0, this)">Nessuno</button>
+      <button class="sconto-opt" onclick="setSconto(5, this)">5%</button>
+      <button class="sconto-opt" onclick="setSconto(10, this)">10%</button>
+      <button class="sconto-opt" onclick="setSconto(15, this)">15%</button>
+      <button class="sconto-opt" onclick="setSconto(20, this)">20%</button>
+      <input class="sconto-custom" id="scontoCustom" type="number" min="0" max="99" placeholder="%" oninput="setSconto(this.value, null)">
     </div>
   </div>
 </div>
@@ -572,153 +550,308 @@
 // =====================
 const PRODOTTI = [
   // ── BAR ──
-  { id:1,  cat:'bar', nome:'Tovagliolo Cellulosa 24x24cm 50pz',
-    desc:'Nero · Rosso · Blu Navy · Bianco · Beige · Marrone · Arancione',
+  { id:1,  cat:'bar', nome:'Tovaglioli Cellulosa 24x24cm 50pz',
+    desc:'Nero · Rosso · Blu Navy · Bianco · Beige · Marrone · Arancione · Per finger food e cocktail · Compostabili',
     prezzo:1.50, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/tovagliolo-di-carta-cocktail-20x20cm-nero-3000-pezzi.jpg?v=1760972445' },
 
-  { id:2,  cat:'bar', nome:'Tovaglioli Monouso 17x17cm 1500pz',
+  { id:2,  cat:'bar', nome:'Tovaglioli Tissue Unicolor 38x38cm 40pz',
+    desc:'Bianco · Marrone · Beige · Nero · Verde · Bordeaux · Rosso · 2 veli · Morbidi',
+    prezzo:1.50, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/bianco.jpg?v=1759418885' },
+
+  { id:3,  cat:'bar', nome:'Tovaglioli Monouso 17x17cm 1500pz',
     desc:'1 velo · Pratici e igienici · Per bar e ristoranti',
     prezzo:3.50, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/tovaglioli-monouso-17-x-17-cm-1-velo-carta-bianco-confezione-18-000-pezzi_124139.webp?v=1761753889' },
 
-  { id:3,  cat:'bar', nome:'1000 Cannucce Nere 15cm',
-    desc:'Eleganti e pratiche · Per bar e ristoranti · 21cm disponibili a €4,90',
+  { id:4,  cat:'bar', nome:'Cannucce Nere 1000pz',
+    desc:'15cm (€3,90) · 21cm (€4,90) · Eleganti per bar e cocktail bar',
     prezzo:3.90, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/1000-cannucce-nere-lunghe-21cm.jpg?v=1760631506' },
 
-  { id:4,  cat:'bar', nome:'Vassoio Medorino Mono Porzione',
-    desc:'Oro o Nero · 6dm €9,00 / 9,5dm €11,00',
+  { id:5,  cat:'bar', nome:'Vassoio Medorino Mono Porzione',
+    desc:'Oro o Nero · 6dm (€9) / 9,5dm (€11) · Per presentazioni al bar e aperitivo',
     prezzo:9.00, um:'pz',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/medorino_318x159_29a363ff-1698-4574-9f57-bb70edc47e47.jpg?v=1769446050' },
 
-  { id:5,  cat:'bar', nome:'Mini Medoro per Dolci Rotondi',
-    desc:'Oro/Nero · 6dm €7,50 / 9,5dm €10,00 / 12cm €12,00',
-    prezzo:7.50, um:'pz',
-    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/MINIMEDORODM6.avif?v=1769445066' },
+  { id:6,  cat:'bar', nome:'Bicchieri in Carta Avana 250ml 50pz',
+    desc:'Beige o Bianco · 250ml · Ecologici · Per bevande calde e fredde',
+    prezzo:2.50, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/250ml.jpg?v=1759415482' },
+
+  { id:7,  cat:'bar', nome:'Bicchiere in Cartoncino 80cc 50pz',
+    desc:'Beige o Bianco · 80cc · Per caffè e degustazioni · Ecologico',
+    prezzo:1.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/75cc.webp?v=1759415053' },
+
+  { id:8,  cat:'bar', nome:'50 Coperchi per Bicchiere in Cartoncino',
+    desc:'Bianco · 80ml (€1,50) / 250ml (€2) · Chiusura affidabile',
+    prezzo:1.50, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/50-coperchi-per-bicchiere-8-oz240ml-neri.jpg?v=1760607153' },
+
+  { id:9,  cat:'bar', nome:'Bicchieri Cristal 50pz',
+    desc:'Trasparente · 100/120/160/205/250/300/390/575cc · Da €2 a €6 · Anche per gelato',
+    prezzo:2.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/51Jkfo6vB0L._AC_SY300_SX300_QL70_ML2.jpg?v=1759418376' },
+
+  { id:10,  cat:'bar', nome:'Bicchieri Plastica 30 strisce 100pz',
+    desc:'Bianco 80/200ml (€18,99) · Trasparente 80/166/200ml (€19,99) · Per aperitivo',
+    prezzo:18.99, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/200-ml-bianco.webp?v=1759160674' },
 
   // ── RISTORAZIONE ──
-  { id:6,  cat:'ristorazione', nome:'Ciotola Degustazione Square 90ml 25pz',
+  { id:11, cat:'ristorazione', nome:'Ciotola Degustazione Square 90ml 25pz',
     desc:'Trasparente o Black · Riutilizzabile · Per antipasti e presentazioni',
     prezzo:6.00, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/ciotola-degustazione-square-trasp-90-ml-25-pezzi.jpg?v=1763048560' },
 
-  { id:7,  cat:'ristorazione', nome:'Bicchiere Degustazione "Pagoda" 25pz',
-    desc:'Nero o Trasparente · 65ml €6,00 / 95ml €6,50 / 110ml €7,00',
+  { id:12, cat:'ristorazione', nome:'Bicchiere Degustazione "Pagoda" 25pz',
+    desc:'Nero o Trasparente · 65ml (€6) / 95ml (€6,50) / 110ml (€7) · Riutilizzabile',
     prezzo:6.00, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/bicchiere-degustazione-pagoda-trasp-90-ml-25-pezzi.jpg?v=1763048054' },
 
-  { id:8,  cat:'ristorazione', nome:'Porta Hot Dog Carta Avana Bio 50pz',
+  { id:13, cat:'ristorazione', nome:'50 Ciotole Poke con Coperchio',
+    desc:'Marrone · 500/750/1000/1300ml · Per asporto, poke bowl, insalate',
+    prezzo:10.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/50-ciotole-poke-50-coperchi-da-1100ml-bassa-diametro-187mm.jpg?v=1760607740' },
+
+  { id:14, cat:'ristorazione', nome:'Porta Hot Dog Bio Compostabile 50pz',
     desc:'Carta avana · Bio-compostabile certificato · Per food truck e catering',
     prezzo:4.00, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/porta-hot-dog-aperto_458x458_5e2061f9-4882-4d87-af45-56ed06a2c839.webp?v=1764945802' },
 
-  { id:9,  cat:'ristorazione', nome:'Asciugamani in Carta Piegati a C',
-    desc:'Per bagni, cucine e strutture ricettive · Igienici',
+  { id:15, cat:'ristorazione', nome:'Porta Hamburger Compostabile 50pz',
+    desc:'Avana · 10x10H7 (€10) / 12x12H7 (€12) / 12x12H11 (€15) / 155x160 (€18)',
+    prezzo:10.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/15x15.jpg?v=1760022957' },
+
+  { id:16, cat:'ristorazione', nome:'Portapanino Avana Biocompost 50pz',
+    desc:'Beige · 590x400x460h · Ecologico e resistente',
+    prezzo:12.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/portapanino.jpg?v=1760023472' },
+
+  { id:17, cat:'ristorazione', nome:'Porta Patatine Compostabile 50pz',
+    desc:'Beige · 93x35x130 (€10) / 90x40x100 (€9) · Prodotto in Italia',
+    prezzo:9.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/patatine.jpg?v=1760024094' },
+
+  { id:18, cat:'ristorazione', nome:'Vaschetta Fast Food Compostabile 50pz',
+    desc:'Beige · 120x100x68x90 · Biodegradabile · Per fritti e street food',
+    prezzo:10.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/fritti.jpg?v=1760024492' },
+
+  { id:19, cat:'ristorazione', nome:'Piatti Piani in Polpa Cellulosa',
+    desc:'Bianco · 18cm (€1,30) / 21cm (€1,85) / 23cm (€1,85) / 33cm (€2,50) · Biodegradabili',
+    prezzo:1.30, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/20-piatti-piani-in-polpa-di-cellulosa-23cm.jpg?v=1760606697' },
+
+  { id:20, cat:'ristorazione', nome:'Piatti IMB Plastica Bianchi Riutilizzabili',
+    desc:'Bianco · Piano o Fondo · €1,50 · Resistenti e lavabili',
+    prezzo:1.50, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/20-piatti-piani-imb-in-plastica-bianchi-riutilizzabili-eleganza-e-sostenibilita.jpg?v=1760605932' },
+
+  { id:21, cat:'ristorazione', nome:'Tovaglie Coprimacchia TNT 25pz',
+    desc:'11 colori: Blu/Navy/Bianco/Verde/Beige/Nero/Grigio/Rosa/Celeste/Arancione/Crema · €10',
+    prezzo:10.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/blu_tnt.jpg?v=1759421919' },
+
+  { id:22, cat:'ristorazione', nome:'Asciugamani in Carta Piegati a C',
+    desc:'Per bagni, cucine e strutture ricettive · Igienici e assorbenti',
     prezzo:1.50, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/wall052-asciugamani-piegati-a-c-150-salviette.jpg?v=1761753189' },
 
-  { id:10, cat:'ristorazione', nome:'Asciugamani Cotone Piegati 15pz',
+  { id:23, cat:'ristorazione', nome:'Asciugamani Cotone Piegati 15pz',
     desc:'Per hotel, spa e strutture ricettive · Morbidi e assorbenti',
     prezzo:28.00, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/asciugamani-piegati-a-v.jpg?v=1765297364' },
 
-  { id:11, cat:'ristorazione', nome:'12 Rotoli Carta Igienica Jumbo Mini',
-    desc:'100% pura cellulosa vergine · Morbida e resistente',
-    prezzo:15.00, um:'cf',
-    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/12-rotoli-di-carta-igienica-jumbo-mini-in-pura-cellulosa.jpg?v=1761752353' },
+  { id:24, cat:'ristorazione', nome:'Guanto Nitrile Nero 100pz',
+    desc:'Nero · S/M/L/XL · €5 · Per chef e cucine professionali · Alta resistenza',
+    prezzo:5.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/GUANTI_NERI.jpg?v=1759758719' },
+
+  { id:25, cat:'ristorazione', nome:'Guanto Nitrile Blu 100pz',
+    desc:'Blu · S/M/L/XL · €5 · Per uso medico, laboratorio e ristorazione',
+    prezzo:5.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/nitrile.jpg?v=1759763236' },
+
+  { id:26, cat:'ristorazione', nome:'Vaschetta Alluminio 100pz',
+    desc:'1/2/4/6/8/12 porzioni · Da €9 a €25 · Monouso · Per cottura e asporto',
+    prezzo:9.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/all_1.webp?v=1759416511' },
+
+  { id:27, cat:'ristorazione', nome:'Sacchetti Carta per Asporto 50pz',
+    desc:'Bianco o Marrone · 32x20x23 / 32x23x30 · €18 · Eco-friendly take away',
+    prezzo:18.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/borse-buste-carta-take-away-bianca-pronto-packaging_720x_800x_600x600_8169e880-7d78-4e44-906d-1bdbd4092d36.webp?v=1760608612' },
 
   // ── PIZZERIA / PUB ──
-  { id:12, cat:'pizzeria', nome:'50 Cartoni Pizza da Asporto',
-    desc:'Termoisolanti · 32x32 €12 / 33x33 €12 / 34x56 €20 / 40x60 €25 / 35x75 €25',
+  { id:28, cat:'pizzeria', nome:'50 Cartoni Pizza da Asporto',
+    desc:'Termoisolanti · 32x32 (€12) / 33x33 (€12) / 34x56 (€20) / 40x60 (€25) / 35x75 (€25)',
     prezzo:12.00, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/scatola-pizza-3333-h-35-cm-con-chiusura-italiana-occhiellata-100-pz.png?v=1760631885' },
 
-  { id:13, cat:'pizzeria', nome:'Carta Alluminio Rotolo 100mt',
-    desc:'Barriera contro umidità e luce · Per alimenti e uso professionale',
+  { id:29, cat:'pizzeria', nome:'Carta Alluminio Rotolo 100mt',
+    desc:'Barriera contro umidità e luce · Per alimenti e uso commerciale',
     prezzo:7.50, um:'rt',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/rotolo-alluminio-ricarica.jpg?v=1761751516' },
 
-  { id:14, cat:'pizzeria', nome:'Pellicola Alimenti Rotolo 300mt',
+  { id:30, cat:'pizzeria', nome:'Pellicola Alimenti Rotolo 300mt',
     desc:'Polietilene alta densità · Aderisce perfettamente · Con linea di taglio',
     prezzo:5.00, um:'rt',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/pellicola.webp?v=1761751361' },
 
-  { id:15, cat:'pizzeria', nome:'10 Rotoli Carta Termica POS 57mm x 20mt',
-    desc:'Per stampanti POS, bilance, registratori di cassa · Stampe nitide',
+  { id:31, cat:'pizzeria', nome:'10 Rotoli Carta Termica POS 57mm x 20mt',
+    desc:'Per stampanti POS, bilance · Stampe nitide e durature',
     prezzo:4.00, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/51_0Zfy7VzL._AC_SX300_SY300_QL70_ML2.jpg?v=1769446404' },
 
-  // ── IMBALLAGGIO ──
-  { id:16, cat:'imballaggio', nome:'Sacchi Ambra Rifiuti 80 Micron 15kg',
-    desc:'Alta resistenza · 90x120 / 70x110 / 50x70 · Raccolta differenziata',
-    prezzo:22.50, um:'cf',
-    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/Sacchi-colore-Ambra-1_425x425_ba37c141-948a-4c96-8be0-0011988ed5bb.webp?v=1765297148' },
+  { id:32, cat:'pizzeria', nome:'10 Termici 80x80 Omologati Registratore Cassa',
+    desc:'80x80mm · Omologati · Per registratori di cassa · Stampe chiare',
+    prezzo:14.99, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/s-l1600_1.webp?v=1760622966' },
 
-  { id:17, cat:'imballaggio', nome:'Nastro FRAGILE 48mm x 66mt 36pz',
-    desc:'Scritta FRAGILE visibile · Adesione forte su cartone · 36 rotoli',
-    prezzo:38.00, um:'cf',
-    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/fragile.webp?v=1763538888' },
+  { id:33, cat:'pizzeria', nome:'50 Rotoli Termici 57x30 Omologati',
+    desc:'57x30mm foro 12 · Omologati · Per registratori di cassa · Conf. 50pz',
+    prezzo:15.99, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/termici_57.webp?v=1760622659' },
 
   // ── GELATERIA ──
-  { id:18, cat:'gelateria', nome:'25 Vaschette Yeti per Gelato',
-    desc:'350gr €15 / 500gr €20 / 750gr €25 / 1000gr €30 · Alta qualità',
+  { id:34, cat:'gelateria', nome:'25 Vaschette Yeti per Gelato',
+    desc:'350gr (€15) / 500gr (€20) / 750gr (€25) / 1000gr (€30) · Alta qualità',
     prezzo:15.00, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/VASCH.YETIGR350M.webp?v=1760629531' },
 
-  { id:19, cat:'gelateria', nome:'100 Savarin in Plastica',
-    desc:'Trasparente · 50dm €7,50 / 70dm €10,00 / 95dm €10,00',
+  { id:35, cat:'gelateria', nome:'Coppa Gelato Biodegradabile varie misure',
+    desc:'Bianco · 80/95/110/130ml · Da €6,50 a €15 · Compostabile',
+    prezzo:6.50, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/coppetta.jpg?v=1760539636' },
+
+  { id:36, cat:'gelateria', nome:'100 Savarin in Plastica',
+    desc:'Trasparente · 50dm (€7,50) / 70dm (€10) / 95dm (€10) · Riutilizzabili',
     prezzo:7.50, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/piccolo.webp?v=1760628927' },
 
-  { id:20, cat:'gelateria', nome:'1 Kg Cucchiaini Granita Colorati',
-    desc:'Multicolore · 15cm €7,50 / 10cm €5,00 · Per bar e gelaterie',
+  { id:37, cat:'gelateria', nome:'1 Kg Cucchiaini Granita Colorati',
+    desc:'Multicolore · 15cm (€7,50) / 10cm palettine (€5) · Per granita e gelato',
     prezzo:7.50, um:'kg',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/principale-cucchiai-gelato.webp?v=1760632740' },
 
-  // ── PASTICCERIA ──
-  { id:21, cat:'pasticceria', nome:'10 Kadò Porta Paste',
-    desc:'Oro · 13x18 €12 / 17x26 €14 / 19,5x28,5 €16 / 23,5x31,5 €18 / 24,5x35,5 €20 / 37x27 €25',
+  // ── PASTICCERIA / DOLCI ──
+  { id:38, cat:'pasticceria', nome:'10 Kadò Porta Paste',
+    desc:'Oro · 13x18 (€12) / 17x26 (€14) / 19,5x28,5 (€16) / 23,5x31,5 (€18) / 24,5x35,5 (€20) / 37x27 (€25)',
     prezzo:12.00, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/KADO_DORATO19X13M.1.webp?v=1760630395' },
 
-  { id:22, cat:'pasticceria', nome:'10 Coperchio Medoro per Dolci',
-    desc:'Trasparente · 20dm €12 / 22dm €13 / 24dm €15 / 26dm €18 / 28dm €20 / 30dm €23',
-    prezzo:12.00, um:'cf',
-    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/medoro_2.webp?v=1760627662' },
+  { id:39, cat:'pasticceria', nome:'Vassoi per Dolci 50pz',
+    desc:'Oro o Bianco · 8 misure · Da €12,99 a €27,99 · Per pasticcerie e bar',
+    prezzo:12.99, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/navette.webp?v=1759420590' },
 
-  { id:23, cat:'pasticceria', nome:'10 Piatti Medoro per Dolci',
-    desc:'Oro · 20dm €15 / 22dm €18 / 24dm €20 / 26dm €21 / 28dm €23 / 30dm €25',
+  { id:40, cat:'pasticceria', nome:'10 Piatti Medoro per Dolci',
+    desc:'Oro · 20dm (€15) / 22dm (€18) / 24dm (€20) / 26dm (€21) / 28dm (€23) / 30dm (€25)',
     prezzo:15.00, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/MEDORON.T.O32.webp?v=1760627224' },
 
-  { id:24, cat:'pasticceria', nome:'100 Porta Babà',
-    desc:'Trasparente · 23,5 €7,50 / 30,5 €10,00 / 34,5 €15,00',
+  { id:41, cat:'pasticceria', nome:'10 Coperchio Medoro per Dolci',
+    desc:'Trasparente · 20dm (€12) / 22dm (€13) / 24dm (€15) / 26dm (€18) / 28dm (€20) / 30dm (€23)',
+    prezzo:12.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/medoro_2.webp?v=1760627662' },
+
+  { id:42, cat:'pasticceria', nome:'50 Coperchio Medoro Mignon 8cm',
+    desc:'Trasparente · 6/9/12/15/18dm · Da €9,99 a €18,99 · Per dolci mignon',
+    prezzo:9.99, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/COP.MINIMEDORODM9_5CM.webp?v=1760626608' },
+
+  { id:43, cat:'pasticceria', nome:'20 Medoro per Dolci',
+    desc:'Oro · 15dm (€13) / 18dm (€15) · Per torte e dolci medio-grandi',
+    prezzo:13.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/MINIMEDORODM15CM.webp?v=1760626029' },
+
+  { id:44, cat:'pasticceria', nome:'100 Mini Medoro per Dolci Mignon',
+    desc:'Oro · 6dm (€6) / 9dm (€8) / 12dm (€9) · Per mignon e monoporzioni',
+    prezzo:6.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/MINIMEDORODM6.webp?v=1760625983' },
+
+  { id:45, cat:'pasticceria', nome:'100 Porta Babà',
+    desc:'Trasparente · 23,5 (€7,50) / 30,5 (€10) / 34,5 (€15) · Per pasticcerie',
     prezzo:7.50, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/BABA_MIGNON.webp?v=1760628557' },
 
-  { id:25, cat:'pasticceria', nome:'6 Lenzuolini Medici 60cm x 50mt',
+  { id:46, cat:'pasticceria', nome:'Mini Medoro per Dolci Rotondi',
+    desc:'Oro/Nero · 6dm (€7,50) / 9,5dm (€10) / 12cm (€12) · Per bar e pasticcerie',
+    prezzo:7.50, um:'pz',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/MINIMEDORODM6.avif?v=1769445066' },
+
+  { id:47, cat:'pasticceria', nome:'6 Lenzuolini Medici 60cm x 50mt',
     desc:'100% pura cellulosa · Per lettino estetista e massaggio · Ipoallergenici',
     prezzo:19.99, um:'cf',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/s-l1600.webp?v=1761750418' },
 
+  { id:48, cat:'pasticceria', nome:'12 Rotoli Carta Igienica Jumbo Mini',
+    desc:'Pura cellulosa vergine · Morbida e resistente · 12 rotoli',
+    prezzo:15.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/12-rotoli-di-carta-igienica-jumbo-mini-in-pura-cellulosa.jpg?v=1761752353' },
+
+  // ── IMBALLAGGIO ──
+  { id:49, cat:'imballaggio', nome:'Sacchi Ambra Rifiuti 80 Micron 15kg',
+    desc:'Alta resistenza · 90x120 / 70x110 / 50x70 · Raccolta differenziata',
+    prezzo:22.50, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/Sacchi-colore-Ambra-1_425x425_ba37c141-948a-4c96-8be0-0011988ed5bb.webp?v=1765297148' },
+
+  { id:50, cat:'imballaggio', nome:'Sacchi Pattumiera Ambra 6pz',
+    desc:'Beige · 90x120 / 70x110 / 50x70 · €1,50 · Uso quotidiano',
+    prezzo:1.50, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/sacchi-pattumiera-ambra.jpg?v=1760609662' },
+
+  { id:51, cat:'imballaggio', nome:'Sacchetti di Carta Bianca 5kg',
+    desc:'Bianco · 8 misure da 10x20 a 30x60 · €15 · Per asporto e confezionamento',
+    prezzo:15.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/sacchetto-satinato-piccolo_04bbd583-2e3f-44e2-b77d-0b216a002b25.webp?v=1759160307' },
+
+  { id:52, cat:'imballaggio', nome:'Nastro FRAGILE 48mm x 66mt 36pz',
+    desc:'Scritta FRAGILE visibile · Adesione forte su cartone · 36 rotoli',
+    prezzo:38.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/fragile.webp?v=1763538888' },
+
+  { id:53, cat:'imballaggio', nome:'Scotch 36pz',
+    desc:'Marrone 66mt (€17,99) / Marrone 132mt (€35,99) / Trasparente 66mt (€17,99) / Trasparente 132mt (€35,99)',
+    prezzo:17.99, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/scotch_avana.webp?v=1759158279' },
+
+  { id:54, cat:'imballaggio', nome:'Film Estensibile 6 Bobine 2,2kg',
+    desc:'Trasparente (€22,99) / Nero (€27,99) / Bianco (€27,99) · Per pallet e spedizioni',
+    prezzo:22.99, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/estensibile.webp?v=1762963845' },
+
+  { id:55, cat:'imballaggio', nome:'Carta A4 5 Risme Copy Right Premium',
+    desc:'75gr (€17,99) / 80gr (€18,99) · Per stampanti laser e inkjet',
+    prezzo:17.99, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/risma_a4.webp?v=1759159480' },
+
+  { id:56, cat:'imballaggio', nome:'Rotoloni Asciugatutto Bobby Mega',
+    desc:'2 rotoli · €6 · Alta assorbenza · Per uso domestico e professionale',
+    prezzo:6.00, um:'cf',
+    img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/bobby.webp?v=1759158450' },
+
   // ── DETERGENZA ──
-  { id:26, cat:'detergenza', nome:'Detergente Matrix Lavastoviglie 5,5kg',
+  { id:57, cat:'detergenza', nome:'Detergente Matrix Lavastoviglie 5,5kg',
     desc:'Pulizia profonda · Per uso professionale · Rimuove residui ostinati',
     prezzo:13.00, um:'pz',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/matrix-detergente-lavastoviglie-kg-55.jpg?v=1760970699' },
 
-  { id:27, cat:'detergenza', nome:'Brillantante Matrix Lavastoviglie 5,5kg',
+  { id:58, cat:'detergenza', nome:'Brillantante Matrix Lavastoviglie 5,5kg',
     desc:'Stoviglie brillanti senza aloni · Facilita asciugatura · Uso professionale',
     prezzo:13.00, um:'pz',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/matrix-brillantante-professionale-kg5.jpg?v=1760970929' },
 
-  { id:28, cat:'detergenza', nome:'Lavapiatti a Mano 5L',
+  { id:59, cat:'detergenza', nome:'Lavapiatti a Mano 5L',
     desc:'Rimuove grasso · Protegge le mani · Per cucine professionali',
     prezzo:7.50, um:'pz',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/efb13eff-2a0c-4366-84eb-915049a09989.jpg?v=1760971997' },
 
-  { id:29, cat:'detergenza', nome:'Lavapavimenti 5L',
+  { id:60, cat:'detergenza', nome:'Lavapavimenti 5L',
     desc:'Per tutti i tipi di pavimenti · Senza residui · Uso domestico e commerciale',
     prezzo:7.50, um:'pz',
     img:'https://cdn.shopify.com/s/files/1/0972/3242/1202/files/ef0453de-c01f-4a78-a2f3-366ef3538339.jpg?v=1760972119' },
@@ -776,7 +909,7 @@ function renderProducts(lista) {
 }
 
 function catLabel(cat) {
-  const map = { bar:'Bar', ristorazione:'Ristorazione', pizzeria:'Pizzeria/Pub', imballaggio:'Imballaggio', gelateria:'Gelateria', pasticceria:'Pasticceria', detergenza:'Detergenza' };
+  const map = { bar:'Bar', ristorazione:'Ristorazione', pizzeria:'Pizzeria/Pub', imballaggio:'Imballaggio', gelateria:'Gelateria', pasticceria:'Pasticceria', detergenza:'Detergenza', generico:'Generico' };
   return map[cat] || cat;
 }
 
@@ -823,24 +956,13 @@ function setSconto(val, btn) {
     btn.classList.add('active');
     document.getElementById('scontoCustom').value = '';
   }
-  // aggiorna badge con animazione
+  // aggiorna badge
   const badge = document.getElementById('scontoBadge');
-  const toggleRow = document.querySelector('.sconto-toggle');
   if (sconto > 0) {
-    badge.style.display = 'none';
-    // force reflow per riavviare l'animazione
-    void badge.offsetWidth;
     badge.style.display = 'inline-block';
     badge.textContent = `-${sconto}%`;
-    toggleRow.classList.add('has-sconto');
   } else {
     badge.style.display = 'none';
-    toggleRow.classList.remove('has-sconto');
-    // se clicco "Nessuno" deseleziono tutti i preset tranne quello cliccato
-    if (!btn) {
-      document.querySelectorAll('.sconto-opt').forEach(b => b.classList.remove('active'));
-      document.querySelector('.sconto-opt').classList.add('active'); // first = Nessuno
-    }
   }
   // aggiorna prezzi nel carrello
   Object.keys(cart).forEach(id => {
